@@ -7,7 +7,4 @@ services:
     ports:
       - '${PORTBASE}80:80'
     volumes:
-      - lap:/var/www/html
-volumes:
-
-  lap:
+      - ./form:/var/www/html
