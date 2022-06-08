@@ -19,7 +19,7 @@ jobs:
           FTP_SERVER: ${{ secrets.SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          LOCAL_DIR: ./html/
+          LOCAL_DIR: ./form/
           REMOTE_DIR: /var/lib/docker/volumes/${{ secrets.CONTAINER_NAME }}_${{ secrets.VOL_NAME }}/_data/
           METHOD: sftp
           PORT: ${{ secrets.PORT }}
