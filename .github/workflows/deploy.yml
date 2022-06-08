@@ -1,0 +1,30 @@
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+name: deploy
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: SFTP-Deploy frontend
+        uses: SamKirkland/FTP-Deploy-Action@2.0.0
+        env:
+          FTP_SERVER: ${{ secrets.SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          LOCAL_DIR: ./html/
+          REMOTE_DIR: /var/lib/docker/volumes/${{ secrets.CONTAINER_NAME }}_${{ secrets.VOL_NAME }}/_data/
+          METHOD: sftp
+          PORT: ${{ secrets.PORT }}
+
+      - name: Pull WebHook for portainer restart
+        uses: muinmomin/webhook-action@v1.0.0
+        with:
+          url: ${{ secrets.PORTAINER_PULL_HOOK }}
