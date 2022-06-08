@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  lap:
+    image: fauria/lap:latest
+    restart: always
+    ports:
+      - '${PORTBASE}80:80'
+    volumes:
+      - lap:/var/www/html
+volumes:
+
+  lap:
