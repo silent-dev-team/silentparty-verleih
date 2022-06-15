@@ -1,0 +1,76 @@
+input[type=text]{
+    outline:none;
+    border: none;
+    border-bottom: 1px black solid;
+
+
+}
+input,select{
+    flex-grow: 1;
+    margin: 5px;
+    padding: 5px;
+    font-family: "bebas neue"
+}
+.input{
+    display:flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content:space-around;
+}
+.row{
+    display:flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+.center{
+    width: 100%;
+    display:flex;
+    justify-content: center;
+}
+#date{
+    self-align:center;
+    display:flex;
+    justify-content:center;
+}
+.datewrapper{
+    margin: 20px 0;
+}
+form{
+    width: 90vw;
+    max-width: 500px;
+    margin:auto;
+    float: left;
+}
+body{
+    background-color: black;
+    color: white;
+    font-family: "bebas neue"
+}
+
+.datepicker-picker{
+    background-color: black !important;
+}
+.button{
+    background-color: black !important;
+    color: white !important;
+}
+
+
+.datepicker-cell{
+
+}
+
+.datepicker-cell:hover{
+    background: none !important;
+    outline: white solid 1px;
+}
+
+.datepicker-cell.disabled{
+    color: #555 !important;
+}
+
+.datepicker-cell.selected{
+    color: black !important;
+    background: #f22 !important;
+    box-shadow: 2px 2px 20px #f22;
+}
