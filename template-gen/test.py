@@ -48,7 +48,7 @@ DEMO:dict = {
   ]
 }
 
-def replace_text(text:str, backbone:dict=DEMO, parentKey:str=None, i:int=None) -> str:
+def replace_text(text:str, backbone:dict=DEMO, parentKey:str=None, enumeration:int=None) -> str:
   if S_REPLACE[0] not in text and S_REPLACE[1] not in text:
     return text
   for key, value in backbone.items():
@@ -57,10 +57,15 @@ def replace_text(text:str, backbone:dict=DEMO, parentKey:str=None, i:int=None) -
       if type(value) in text_types:
         text = text.replace('{{'+key+'}}', str(value))
         if parentKey:
-          text = text.replace('{{'+f'{parentKey}[{i}].{key}'+'}}', str(value))
-      if type(value) == list:
+          if enumeration:
+            text = text.replace('{{'+f'{parentKey}[{enumeration}].{key}'+'}}', str(value))
+          else:
+            text = text.replace('{{'+f'{parentKey}.{key}'+'}}', str(value))
+      elif type(value) == list:
         for i,e in enumerate(value):
-          replace_text(text, e, parentKey=key, i=i)
+          replace_text(text, e, parentKey=key, enumeration=i)
+      elif type(value) == dict:
+        replace_text(text, e, parentKey=key)
   return text
 
 def replace_in_paragraph(p) -> str:
