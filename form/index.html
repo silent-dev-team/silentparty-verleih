@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@kingshott/iodine@8.0.0/dist/iodine.min.umd.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/locales/de.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,6 +18,7 @@
             <div class="input">
                 <label for="vorname">Vorname</label>
                 <input id="vorname" type="text" x-model="data.vorname">
+                <div x-text="validation.vorname"></div>
             </div>
             <div class="input">
                 <label for="nachname">Nachname</label>
@@ -106,6 +107,25 @@
                     anzahl_kopfhoerer:20,
                     anzahl_kanaele:3,
 
+                },
+                rules:{
+                    vorname:['required'],
+                    nachname:['required'],
+                    organistation:['required'],
+                    
+                    strasse:['required'],
+                    hausnummer:['required'],
+                    ort:['required'],
+                    postleitzahl:['required'],
+
+                    date:['required'],
+                    dauer:['required'],
+                    anzahl_kopfhoerer:['required'],
+                    anzahl_kanaele:['required'], 
+                },
+                validation:{},
+                init(){
+                    validation = Iod
                 }
             }));
 
@@ -134,13 +154,4 @@
         })
     </script>
 </body>
-=======
-<html>
-    <head>
-        Hallo Welt!
-    </head>
-    <body>
-        Jo, das ist ein Test!
-    </body>
->>>>>>> 52fecc4e366185c0b57ae1282f26990cfc7ec940
 </html>
