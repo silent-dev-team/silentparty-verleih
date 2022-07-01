@@ -13,6 +13,7 @@
     <title>Silent Party Kopfhöerer Verleih</title>
 </head>
 <body>
+<div class="center">
     <form x-data="orderform" action="#">
         <div class="row">
             <div class="input">
@@ -37,10 +38,11 @@
 
         <div class="row">
             <div class="input">
-                <label for="strasse">Straße & Hausnummer</label>
+                <label for="strasse">Straße</label>
                 <input id="strasse" type="text" x-model="data.strasse">
             </div>
             <div class="input">
+                <label for="nummer">Hausnummer</label>
                 <input id="nummer" type="text" x-model="data.hausnummer">
             </div>
             
@@ -57,8 +59,10 @@
             </div>
             
         </div>
-
+        <div class="datewrapper">
+        <label>Event Datum:</label>
         <div id="date" x-data="cal" x-modelable="date" x-model="data.date"></div>
+        </div>
         <div class="input">
             <label for="dauer">Eventdauer:</label>
             <input id="dauer" type="number" value="1" x-model="data.dauer">
@@ -87,7 +91,7 @@
         <input type="submit">
         <a x-text="JSON.stringify(data)"></a>
     </form>
-
+</div>
 
     <script>
         document.addEventListener('alpine:init', () => {
