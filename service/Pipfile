@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 python-docx = "*"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 
