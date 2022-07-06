@@ -1,5 +1,12 @@
 from docx import Document
+from docx.text.paragraph import Paragraph
+from docx.text.run import Run
+from docx.table import Table, _Row, _Cell
+
+from docx.styles.style import _ParagraphStyle,_CharacterStyle
+
 import re
+from copy import deepcopy
 
 S_REPLACE:list[str] = ["{{","}}"]
 S_FORMULA:list[str] = ["{%","%}"]
@@ -71,38 +78,74 @@ def replace_text(text:str, backbone:dict=DEMO, parentKey:str=None, enumeration:i
         text = replace_text(text, e, parentKey=key)
   return text
 
-def replace_in_paragraph(p) -> str:
-  inline = p.runs
-  for i in range(len(inline)):
-    text = replace_text(inline[i].text)
-    inline[i].text = text
+def replace_in_paragraph(p:Paragraph) -> Paragraph:
+  runs:list[Run] = p.runs
+  for run in runs:
+    text = replace_text(run.text)
+    run.text = text
   return p
+
+
+def iterate_table(table:Table):
+  def remove_row(table:Table, row:_Row | None):
+    if row:
+      tbl = table._tbl
+      tr = row._tr
+      tbl.remove(tr)
+  
+  key:str=None
+  iteration:list=None
+  
+  first_cell:_Cell = table.rows[0].cells[0]
+  fc_text:str = first_cell.text
+  
+  params = []
+  
+  for k, v in DEMO.items():
+    if f'{S_REPLACE[0]}{k}' in fc_text:
+      key, iteration = k, v
+      break
+  if not key:
+    return table
+  
+  if '|' in fc_text:
+    start: int = fc_text.find('|')+1
+    end: int = fc_text.find(S_REPLACE[1])
+    param_s = fc_text[start:end].replace(' ','')
+    params = param_s.split(',')
+  
+  headline:_Row|None = table.rows[1] if 'headline' in params else None
+  workRow_number:int = 2 if headline else 1
+  workRow:_Row = table.rows[workRow_number]
+  
+  for num,e in enumerate(iteration):
+    newRow:_Row = table.add_row()
+    for w_cell,n_cell in zip(workRow.cells,newRow.cells):
+      for w_p in w_cell.paragraphs:
+        n_p:Paragraph = n_cell.add_paragraph()
+        n_p.style= w_p.style
+        w_runs:list[Run] = w_p.runs
+        for w_run in w_runs:
+          text: str = w_run.text
+          for k,v in e.items():
+            text = text.replace(S_REPLACE[0]+k+S_REPLACE[1],f'{S_REPLACE[0]}{key}[{num+1}].{k}{S_REPLACE[1]}')
+          n_p.add_run(text)
+          
+  remove_row(table, table.rows[workRow_number])
+  remove_row(table, table.rows[0])
+  return table
+    
 
 doc = Document('./templates/angebot.docx')
 
-for table in doc.tables:
-  first_cell = table.rows[0].cells[0]
-  text = first_cell.text
-  key, value = None
-  params = []
-  for k, v in DEMO.items():
-    if S_REPLACE[0]+key in text:
-      key, value = k, v
-      break
-  if '|' in text:
-    start: int = text.find('|')
-    end: int = text.find(S_REPLACE[1])
-    param_s = text[start:end].replace(' ','')
-    params = param_s.split(',')
-  
-  row_number = 0 if 'headline' not in params else 0
-  table.rows[row_number]
-  for e in DEMO[key]:
-    pass
-  
 
-for table in doc.tables:
-  for row in table.rows:
+
+for t in doc.tables:
+  t = iterate_table(t)
+
+
+for t in doc.tables:
+  for row in t.rows:
     for cell in row.cells:
       for p in cell.paragraphs:
         p = replace_in_paragraph(p)
