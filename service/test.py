@@ -48,6 +48,9 @@ DEMO:dict = {
   ]
 }
 
+def btwn(text,sep:list[str]=S_REPLACE):
+  return f'{sep[0]}{text}{sep[1]}'
+
 def replace_text(text:str, backbone:dict=DEMO, parentKey:str=None, enumeration:int=None) -> str:
   if S_REPLACE[0] not in text and S_REPLACE[1] not in text:
     return text
@@ -55,17 +58,17 @@ def replace_text(text:str, backbone:dict=DEMO, parentKey:str=None, enumeration:i
     if key in text:
       text_types = [str,int]
       if type(value) in text_types:
-        text = text.replace('{{'+key+'}}', str(value))
+        text = text.replace(btwn(key), str(value))
         if parentKey:
           if enumeration:
-            text = text.replace('{{'+f'{parentKey}[{enumeration}].{key}'+'}}', str(value))
+            text = text.replace(btwn(f'{parentKey}[{enumeration}].{key}'), str(value))
           else:
-            text = text.replace('{{'+f'{parentKey}.{key}'+'}}', str(value))
+            text = text.replace(btwn(f'{parentKey}.{key}'), str(value))
       elif type(value) == list:
         for i,e in enumerate(value):
-          replace_text(text, e, parentKey=key, enumeration=i)
+          text = replace_text(text, e, parentKey=key, enumeration=i+1)
       elif type(value) == dict:
-        replace_text(text, e, parentKey=key)
+        text = replace_text(text, e, parentKey=key)
   return text
 
 def replace_in_paragraph(p) -> str:
@@ -76,6 +79,27 @@ def replace_in_paragraph(p) -> str:
   return p
 
 doc = Document('./templates/angebot.docx')
+
+for table in doc.tables:
+  first_cell = table.rows[0].cells[0]
+  text = first_cell.text
+  key, value = None
+  params = []
+  for k, v in DEMO.items():
+    if S_REPLACE[0]+key in text:
+      key, value = k, v
+      break
+  if '|' in text:
+    start: int = text.find('|')
+    end: int = text.find(S_REPLACE[1])
+    param_s = text[start:end].replace(' ','')
+    params = param_s.split(',')
+  
+  row_number = 0 if 'headline' not in params else 0
+  table.rows[row_number]
+  for e in DEMO[key]:
+    pass
+  
 
 for table in doc.tables:
   for row in table.rows:
