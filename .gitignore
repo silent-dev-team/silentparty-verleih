@@ -1,1 +1,3 @@
 service/templates/.~lock.angebot.docx#
+*.lock*
+*lock.*
