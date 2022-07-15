@@ -50,7 +50,7 @@ async def docify(angebot: Angebot):
 
 app.mount("/parsed_files", StaticFiles(directory="parsed_files"), name="parsed_files")
 
-@app.post("/notify_auftrag")
+@app.post("/notify/auftrag")
 async def onAuftrag():
     bot.send_message(text="Neue Anfrage über das Ausleihformular!", chat_id=TG_GROUP)
     return {"message": "done"}
