@@ -12,8 +12,18 @@ CMS = os.environ['CMS']
 TG_TOKEN = os.environ['TG_TOKEN']
 TG_GROUP = int(os.environ['TG_GROUP']) or None
 
-app = FastAPI()
+HEADERS: dict = {
+    'Content-type': 'application/json', 
+    'Accept': 'text/plain'
+}
+
 bot = telegram.Bot(TG_TOKEN)
+
+app = FastAPI()
+
+script_dir = os.path.dirname(__file__)
+st_abs_file_path = os.path.join(script_dir, "static/")
+app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 
 @app.get("/")
 async def root():
@@ -25,25 +35,14 @@ async def docify(angebot: Angebot):
     doc = Docifyer(name='angebot', data=angebot.dict())
     doc.run()
     name = doc.save(path='./static',thema=thema)
-
-    directus_import: dict = {
-        "url": URL+"/static/"+name
-    }
-    
-    r = requests.post(
+    url:str = URL+"/static/"+name
+    return requests.post(
         url = CMS + '/files/import',
-        data = json.dumps(directus_import),
-        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        headers = HEADERS,
+        json = {
+            "url": url
+        }
     )
-    
-    res = {}
-    res['directus_import'] = directus_import
-    res['directus_response'] = r.json()
-    return res
-
-script_dir = os.path.dirname(__file__)
-st_abs_file_path = os.path.join(script_dir, "static/")
-app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 
 @app.post("/notify/auftrag")
 async def onAuftrag():
