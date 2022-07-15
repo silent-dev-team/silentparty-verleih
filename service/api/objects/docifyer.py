@@ -45,7 +45,7 @@ class Docifyer():
     name += '.docx'
     full_path = path+f'/{name}'
     self.doc.save(full_path)
-    return full_path, name
+    return name
 
   def _btwn(self, text,sep:list[str]=None):
     sep = sep or self.S_REPLACE

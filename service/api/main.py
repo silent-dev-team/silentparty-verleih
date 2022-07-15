@@ -8,10 +8,10 @@ import requests
 
 import os, telegram
 
-URL = os.getenv('URL')
-CMS = os.getenv('CMS')
-TG_TOKEN = os.getenv('TG_TOKEN')
-TG_GROUP = int(os.getenv('TG_GROUP')) or None
+URL = os.environ('URL')
+CMS = os.environ('CMS')
+TG_TOKEN = os.environ('TG_TOKEN')
+TG_GROUP = int(os.environ('TG_GROUP')) or None
 
 
 app = FastAPI()
@@ -30,7 +30,7 @@ async def docify(angebot: Angebot):
     path, name = doc.save(thema=thema)
 
     directus_import: dict = {
-        "url": path
+        "url": URL+"/parsed_files/"+name
     }
     
     r = requests.post(
