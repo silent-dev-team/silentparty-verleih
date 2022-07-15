@@ -14,7 +14,7 @@ class Docifyer():
   S_FORMULA:list[str] = ["{%","%}"]
   S_TABLE:str = S_FORMULA[0]+'TABLE'+S_FORMULA[1]
   TEMPLATE_PATH:str = "./templates"
-  TEMPORARY_PATH:str = "./temporary"
+  TEMPORARY_PATH:str = "./parsed_files"
   
   def __init__(self, name:str, data:dict):
     self.name = name
@@ -34,7 +34,7 @@ class Docifyer():
     for p in self.doc.paragraphs:
       p = self._replace_in_paragraph(p)
   
-  def save(self, path:str = None, thema:str= None, with_date:bool = True):
+  def save(self, path:str = None, thema:str= None, with_date:bool = True) -> tuple[str,str]:
     path = path or self.TEMPORARY_PATH
     today:str = str(date.today())
     name: str = self.name
@@ -42,7 +42,10 @@ class Docifyer():
       name += f'_{thema}'
     if with_date:
       name += f'_{today}'
-    self.doc.save(path+f'/{name}.docx')
+    name += '.docx'
+    full_path = path+f'/{name}'
+    self.doc.save(full_path)
+    return full_path, name
 
   def _btwn(self, text,sep:list[str]=None):
     sep = sep or self.S_REPLACE
