@@ -12,8 +12,8 @@ URL = 'http://localhost:8000'
 CMS = 'https://cms.silentparty-hannover.de'
 
 
-TG_TOKEN = os.getenv('TG_TOKEN')
-TG_GROUP = int(os.getenv('TG_GROUP')) or None
+TG_TOKEN = ""#os.getenv('TG_TOKEN')
+TG_GROUP = ""#int(os.getenv('TG_GROUP')) or None
 
 
 app = FastAPI()
