@@ -39,7 +39,7 @@ async def docify(angebot: Angebot):
     )
     return r.json() #return URL+"/parsed_files/"+name
 
-app.mount("/parsed_files", StaticFiles(directory="parsed_files"), name="parsed_files")
+app.mount("/parsed_files", StaticFiles(directory="./parsed_files"), name="parsed_files")
 
 @app.post("/notify/auftrag")
 async def onAuftrag():
