@@ -1,155 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./style.css">
+    <script  src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css">
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script defer src="https://unpkg.com/@directus/sdk@10.1.1/dist/sdk.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@kingshott/iodine@8.0.0/dist/iodine.min.umd.js" defer></script>
+    
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/locales/de.js"></script>
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Silent Party Kopfhöerer Verleih</title>
 </head>
+
 <body>
-<div class="center">
-    <form x-data="orderform" action="#">
-        <div class="row">
-            <div class="input">
-                <label for="vorname">Vorname</label>
-                <input id="vorname" type="text" x-model="data.vorname">
-                <div x-text="validation.vorname"></div>
-            </div>
-            <div class="input">
-                <label for="nachname">Nachname</label>
-                <input id="nachname" type="text" x-model="data.nachname">
-            </div>
-            
-        </div>
-        <div class="input">
-            <label for="organisation">Organisation</label>
-            <input id="organisation" type="text" x-model="data.organisation">
-        </div>
-        <div class="input">
-            <label for="email">Email</label>
-            <input id="email" type="text" x-model="data.email">
-        </div>
 
-        <div class="row">
-            <div class="input">
-                <label for="strasse">Straße</label>
-                <input id="strasse" type="text" x-model="data.strasse">
-            </div>
-            <div class="input">
-                <label for="nummer">Hausnummer</label>
-                <input id="nummer" type="text" x-model="data.hausnummer">
-            </div>
-            
-        </div>
+    <div x-data="orderform" class="center">
+        <form x-ref="form" @submit.prevent="sendData()" x-show="state=='fill'" x-transition.duration.500ms>
+            <div class="row">
+                <div class="input" x-data="input('vorname')">
+                    <label></label>
+                    <input type="text">
+                    <div class="error"></div>
+                </div>
 
-        <div class="row">
-            <div class="input">
-                <label for="plz">Postleitzahl</label>
-                <input id="plz" type="text" x-model="data.postleitzahl">
+                <div class="input" x-data="input('nachname')">
+                    <label></label>
+                    <input type="text">
+                    <div class="error"></div>
+                </div>
             </div>
-            <div class="input">
-                <label for="ort">Ort</label>
-                <input id="ort" type="text" x-model="data.ort">
+            <div class="input" x-data="input('organisation')">
+                <label></label>
+                <input type="text">
+                <div class="error"></div>
             </div>
-            
+            <div class="input" x-data="input('email')">
+                <label></label>
+                <input type="text">
+                <div class="error"></div>
+            </div>
+
+            <div class="row">
+                <div class="input" x-data="input('strasse')">
+                    <label></label>
+                    <input type="text">
+                    <div class="error"></div>
+                </div>
+                <div class="input" x-data="input('hausnummer')">
+                    <label></label>
+                    <input type="text">
+                    <div class="error"></div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="input" x-data="input('plz')">
+                    <label></label>
+                    <input type="text">
+                    <div class="error"></div>
+                </div>
+                <div class="input" x-data="input('ort')">
+                    <label></label>
+                    <input type="text">
+                    <div class="error"></div>
+                </div>
+            </div>
+            <div class="datewrapper">
+                <label>Event Datum:</label>
+                <div id="datum" x-data="cal" x-modelable="datum" x-model="data.datum"></div>
+            </div>
+            <div class="input" x-data="input('eventdauer')">
+                <label></label>
+                <input type="text">
+                <div class="error"></div>
+            </div>
+
+            <div class="input" x-data="input('kopfhoerer')">
+                <label></label>
+                <input type="text">
+                <div class="error"></div>
+            </div>
+
+            <div class="input" x-data="input('sender')">
+                <label></label>
+                <select>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                </select>
+                <div class="error"></div>
+            </div>
+            <div class="input row">
+                <input id="ok" type="checkbox" x-model="savedata">
+                <label for="ok">Ich bin damit einverstaden, dass die angegebenden daten zur verarbeitung meiner Anfrage
+                    gespreichert
+                    werden</label>
+
+            </div>
+            <div class"row">
+            <input type="submit" style="margin:0; width: 100%; height: 50px;" x-bind:disabled="!(validation.valid && savedata)">
         </div>
-        <div class="datewrapper">
-        <label>Event Datum:</label>
-        <div id="date" x-data="cal" x-modelable="date" x-model="data.date"></div>
+        </form>
+        <div x-show="state=='waiting'" x-cloak x-transition.duration.500ms>Waiting... </div>
+        <div x-show="state=='done'" x-cloak x-transition.duration.500ms class="done">
+            <div>
+            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+            width="45%" height="45%" viewBox="0 0 1280.000000 1280.000000"
+            preserveAspectRatio="xMidYMid meet">
+            <metadata>
+            Created by potrace 1.15, written by Peter Selinger 2001-2017
+            </metadata>
+            <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
+            fill="currentColor" stroke="none">
+            <path d="M6100 12794 c-25 -2 -112 -8 -195 -14 -1720 -125 -3349 -977 -4456
+            -2330 -1097 -1340 -1600 -3045 -1408 -4765 233 -2086 1486 -3930 3347 -4929
+            1324 -711 2863 -929 4342 -615 1233 261 2375 893 3259 1805 1404 1447 2041
+            3442 1735 5434 -341 2223 -1850 4118 -3949 4962 -578 233 -1166 373 -1815 434
+            -153 14 -753 27 -860 18z m800 -989 c337 -32 678 -95 994 -185 624 -177 1242
+            -483 1761 -873 1035 -778 1755 -1889 2039 -3147 220 -979 166 -2006 -157
+            -2955 -247 -726 -652 -1401 -1170 -1950 -473 -502 -963 -866 -1567 -1164 -471
+            -233 -960 -392 -1480 -480 -801 -136 -1616 -94 -2400 125 -817 229 -1604 672
+            -2220 1252 -509 479 -884 986 -1181 1596 -464 956 -636 2003 -503 3066 155
+            1240 749 2407 1664 3265 948 890 2157 1402 3470 1469 148 7 588 -4 750 -19z"/>
+            <path d="M9193 9046 c-23 -7 -62 -25 -85 -39 -24 -14 -803 -787 -1733 -1716
+            l-1690 -1691 -980 979 c-770 769 -991 984 -1030 1004 -72 36 -152 49 -222 36
+            -111 -21 -141 -44 -411 -317 -300 -303 -307 -314 -307 -462 0 -83 3 -102 27
+            -150 23 -46 259 -286 1475 -1503 l1448 -1447 2166 2167 c2439 2441 2214 2200
+            2214 2373 0 145 -12 163 -318 468 -210 209 -262 255 -310 277 -70 32 -181 42
+            -244 21z"/>
+            </g>
+            </svg>
+            Wir haben deine Daten Erhalten und melden uns sehr bald bei dir!    
+            </div>
         </div>
-        <div class="input">
-            <label for="dauer">Eventdauer:</label>
-            <input id="dauer" type="number" value="1" x-model="data.dauer">
-        </div>
-        <div class="input">
-            <label for="anzahl">Anzahl Kopfhörer</label>
-            <input id="anzahl" type="number" x-model="data.anzahl_kopfhoerer">
-        </div>
-        <div class="input">
-            <label for="kanal">Anzahl kanäle</label>
-            <select id="kanal" x-model="data.anzahl_kanaele">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3" selected>3</option>
-            </select>
-        </div>
-        <div class="input">
-            <input type="checkbox">
-            <label>Ich bin damit einverstaden, dass die angegebenden daten zur verarbeitung meiner Anfrage gespreichert werden</label>
-            
-        </div>
-        <div class="input">
-            <input type="checkbox">
-            <label>Ich bin damit einverstaden, dass die angegebenden daten zur verarbeitung meiner Anfrage gespreichert werden</label>
-        </div>
-        <input type="submit">
-        <a x-text="JSON.stringify(data)"></a>
-    </form>
-</div>
+    </div>
 
     <script>
+        
         document.addEventListener('alpine:init', () => {
+
+            var defaultData = {
+                    vorname: "",
+                    nachname: "",
+                    organisation: "",
+                    email: "",
+                    strasse: "",
+                    hausnummer: "",
+                    ort: "",
+                    plz: "",
+
+                    datum: "",
+                    eventdauer: 1,
+                    kopfhoerer: 20,
+                    sender: 3,
+
+                };
+            
+            directus = new DirectusSdk.Directus("https://cms.silentparty-hannover.de");
+            const anfrage = directus.items('anfrage');
+
+            Iodine.setErrorMessages({ "required": `Feld darf nicht leer sein!`,"email": "Falsches Format" });
+            Alpine.data('input', (init_name) => ({
+                name: init_name,
+                _touched: false,
+                get valid() {
+                    return (!this._touched && !this.validated) || this.validation.fields[this.name.toLowerCase()].valid;
+                },
+                classB() {
+                    return this.valid ? (this._touched ? "valid" : "") : "invalid";
+                },
+                init() {
+                    this.$el.querySelector("label")?.setAttribute("for", this.name.toLowerCase());
+                    console.log(this.$el.querySelector("label"));
+                    this.$el.querySelector("label") && (this.$el.querySelector("label").innerHTML = this.name);
+                    this.$el.querySelector(".error")?.setAttribute("x-text", `validation.fields.${this.name.toLowerCase()}.error`);
+                    this.$el.querySelector(".error")?.setAttribute("x-show", `!valid`);
+                    this.$el.querySelector("input")?.setAttribute("x-model", `data.${this.name.toLowerCase()}`);
+                    this.$el.querySelector("input") && (this.$el.querySelector("input").id = this.name.toLowerCase());
+                    this.$el.querySelector("input")?.setAttribute("x-bind", "input");
+
+                    this.$el.querySelector("select")?.setAttribute("x-model", `data.${this.name.toLowerCase()}`);
+                    this.$el.querySelector("select") && (this.$el.querySelector("select").id = this.name.toLowerCase());
+                    this.$el.querySelector("select")?.setAttribute("x-bind", "input");
+
+                    this.$el.setAttribute("x-bind:class", "classB");
+                    this._touched = this.data[this.name.toLowerCase()] !== "";
+                },
+                input: {
+                    ['@input']() {
+                        this._touched = true;
+                    },
+                    ['@blur']() {
+                        this._touched = true;
+                    }
+                }
+
+            }));
             Alpine.data('orderform', () => ({
-                data:{
-                    vorname:"",
-                    nachname:"",
-                    organistation:"",
-                    
-                    strasse:"",
-                    hausnummer:"",
-                    ort:"",
-                    postleitzahl:"",
+                validated: false,
+                state: 'fill',
+                savedata: false,
+                data: Alpine.$persist({...defaultData}),
+                rules: {
+                    vorname: ['required'],
+                    nachname: ['required'],
+                    organisation: [],
+                    email: ['required','email'],
+                    strasse: ['required'],
+                    hausnummer: ['required'],
+                    ort: ['required'],
+                    plz: ['required'],
 
-                    date:"",
-                    dauer:1,
-                    anzahl_kopfhoerer:20,
-                    anzahl_kanaele:3,
-
+                    datum: ['required'],
+                    eventdauer: ['required'],
+                    kopfhoerer: ['required'],
+                    sender: ['required'],
                 },
-                rules:{
-                    vorname:['required'],
-                    nachname:['required'],
-                    organistation:['required'],
-                    
-                    strasse:['required'],
-                    hausnummer:['required'],
-                    ort:['required'],
-                    postleitzahl:['required'],
-
-                    date:['required'],
-                    dauer:['required'],
-                    anzahl_kopfhoerer:['required'],
-                    anzahl_kanaele:['required'], 
+                get validation() {
+                    return Iodine.assert(this.data, this.rules);
                 },
-                validation:{},
-                init(){
-                    validation = Iod
+                async sendData() {
+                    if (this.validation.valid && this.savedata) {
+                        this.state = "waiting";
+                        await anfrage.createOne(
+                            this.data
+                        );
+                        this.state = "done";
+                        this.data = {...defaultData};
+                    } else {
+                        this.validated = true;
+                    }
+                },
+                init() {
+
                 }
             }));
 
-            Alpine.data("cal", ()=>({
+            Alpine.data("cal", () => ({
                 picker: null,
                 update: 0,
-                get date(){
+                get datum() {
                     this.update++;
                     return this.picker.getDate("yyyy-mm-dd");
                 },
-                set date(date){
+                set datum(date) {
                     this.update--;
                     this.picker.setDate(this.date);
                 },
-                init(){
+                init() {
                     this.picker = new Datepicker(this.$el, {
                         minDate: new Date(),
                         language: 'de'
-                    }); 
-                    this.$el.addEventListener("changeDate", ()=>{
+                    });
+                    this.$el.addEventListener("changeDate", () => {
                         this.update = 0;
                     });
                 }
@@ -158,4 +269,5 @@
         })
     </script>
 </body>
+
 </html>
