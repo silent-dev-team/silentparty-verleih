@@ -5,9 +5,6 @@ from docx.table import Table, _Row, _Cell
 from docx.styles.style import _ParagraphStyle,_CharacterStyle
 from copy import deepcopy
 
-from datetime import date
-
-
 class Docifyer():
   
   S_REPLACE:list[str] = ["{{","}}"]
@@ -34,14 +31,13 @@ class Docifyer():
     for p in self.doc.paragraphs:
       p = self._replace_in_paragraph(p)
   
-  def save(self, path:str = None, thema:str= None, with_date:bool = True) -> tuple[str,str]:
+  def save(self, path:str = None, thema:str= None, date:str = None) -> tuple[str,str]:
     path = path or self.TEMPORARY_PATH
-    today:str = str(date.today())
     name: str = self.name
     if thema:
       name += f'_{thema}'
-    if with_date:
-      name += f'_{today}'
+    if date:
+      name += f'_{date}'
     name += '.docx'
     full_path = path+f'/{name}'
     self.doc.save(full_path)
