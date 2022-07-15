@@ -11,6 +11,7 @@ services:
 
   service:
     build: ./service
+    restart: always
     ports: 
       - "${PORTBASE}88:80"
     environment:

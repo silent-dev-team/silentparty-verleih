@@ -24,17 +24,17 @@ async def docify(angebot: Angebot):
     thema:str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
     doc.run()
-    name = doc.save(path='./static/angebote',thema=thema)
+    name = doc.save(path='./static',thema=thema)
 
     directus_import: dict = {
-        "url": URL+"/static/angebote/"+name
+        "url": URL+"/static/"+name
     }
     
     r = requests.post(
         url = CMS + '/files/import',
         data = directus_import
     )
-    return r.json() #return URL+"/static/angebote/"+name
+    return r.json() #return URL+"/static/"+name
 
 script_dir = os.path.dirname(__file__)
 st_abs_file_path = os.path.join(script_dir, "static/")
