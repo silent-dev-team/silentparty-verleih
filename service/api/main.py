@@ -32,8 +32,10 @@ async def docify(angebot: Angebot):
     
     r = requests.post(
         url = CMS + '/files/import',
-        data = directus_import
+        data = json.dumps(directus_import),
+        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     )
+    
     res = {}
     res['directus_import'] = directus_import
     res['directus_response'] = r.json()
