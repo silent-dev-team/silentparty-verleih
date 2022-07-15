@@ -8,12 +8,10 @@ import requests
 
 import os, telegram
 
-URL = 'http://localhost:8000'
-CMS = 'https://cms.silentparty-hannover.de'
-
-
-TG_TOKEN = ""#os.getenv('TG_TOKEN')
-TG_GROUP = ""#int(os.getenv('TG_GROUP')) or None
+URL = os.getenv('URL')
+CMS = os.getenv('CMS')
+TG_TOKEN = os.getenv('TG_TOKEN')
+TG_GROUP = int(os.getenv('TG_GROUP')) or None
 
 
 app = FastAPI()
@@ -30,23 +28,16 @@ async def docify(angebot: Angebot):
     doc = Docifyer(name='angebot', data=angebot.dict())
     doc.run()
     path, name = doc.save(thema=thema)
-    """
+
     directus_import: dict = {
-        "url": 'https://www.orimi.com/pdf-test.pdf', #path,
-        "data": { 
-            "url": 'https://www.orimi.com/pdf-test.pdf',
-            "folder": "Dokumente/Angebote",
-            "title": name,
-        }
+        "url": path
     }
     
     r = requests.post(
         url = CMS + '/files/import',
         data = directus_import
     )
-    return r.json()
-    """
-    return URL+"/parsed_files/"+name
+    return r.json() #return URL+"/parsed_files/"+name
 
 app.mount("/parsed_files", StaticFiles(directory="parsed_files"), name="parsed_files")
 
