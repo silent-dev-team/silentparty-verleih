@@ -11,12 +11,7 @@ CMS = os.environ['CMS']
 TG_TOKEN = os.environ['TG_TOKEN']
 TG_GROUP = int(os.environ['TG_GROUP']) or None
 
-HEADERS: dict = {
-    'Content-type': 'application/json'
-}
-
 bot = telegram.Bot(TG_TOKEN)
-
 app = FastAPI()
 
 script_dir = os.path.dirname(__file__)
@@ -37,7 +32,6 @@ async def docify(angebot: Angebot):
     
     r = requests.post(
         url = CMS + '/files/import',
-        #headers = {'Content-Type': 'application/json'},
         json = {'url': url}
     )
     
