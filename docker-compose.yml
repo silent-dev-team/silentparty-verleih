@@ -8,5 +8,11 @@ services:
       - '${PORTBASE}80:80'
     volumes:
       - html:/var/www/html
+
+  service:
+    build: ./service
+    ports: 
+      - "${PORTBASE}88:80"
+    
 volumes:
   html:
