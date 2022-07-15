@@ -36,7 +36,7 @@ async def docify(angebot: Angebot):
     )
     res = {}
     res['directus_import'] = directus_import
-    res['directus_response'] = json.loads(r.json())
+    res['directus_response'] = r.json()
     return res
 
 script_dir = os.path.dirname(__file__)
