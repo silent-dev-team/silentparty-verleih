@@ -14,7 +14,7 @@ class Docifyer():
   S_FORMULA:list[str] = ["{%","%}"]
   S_TABLE:str = S_FORMULA[0]+'TABLE'+S_FORMULA[1]
   TEMPLATE_PATH:str = "./templates"
-  TEMPORARY_PATH:str = "./parsed_files"
+  TEMPORARY_PATH:str = "./static"
   
   def __init__(self, name:str, data:dict):
     self.name = name

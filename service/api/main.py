@@ -12,12 +12,6 @@ CMS = os.environ['CMS']
 TG_TOKEN = os.environ['TG_TOKEN']
 TG_GROUP = int(os.environ['TG_GROUP']) or None
 
-f = []
-for (dirpath, dirnames, filenames) in os.walk('./'):
-    f.extend(filenames)
-    break
-print(f)
-
 app = FastAPI()
 bot = telegram.Bot(TG_TOKEN)
 
@@ -25,25 +19,26 @@ bot = telegram.Bot(TG_TOKEN)
 async def root():
     return {"message": "Hello World"}
 
-
 @app.post("/docify/angebot")
 async def docify(angebot: Angebot):
     thema:str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
     doc.run()
-    path, name = doc.save(thema=thema)
+    name = doc.save(path='./static/angebote',thema=thema)
 
     directus_import: dict = {
-        "url": URL+"/parsed_files/"+name
+        "url": URL+"/static/angebote/"+name
     }
     
     r = requests.post(
         url = CMS + '/files/import',
         data = directus_import
     )
-    return r.json() #return URL+"/parsed_files/"+name
+    return r.json() #return URL+"/static/angebote/"+name
 
-app.mount("/parsed_files", StaticFiles(directory="parsed_files"), name="parsed_files")
+script_dir = os.path.dirname(__file__)
+st_abs_file_path = os.path.join(script_dir, "static/")
+app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 
 @app.post("/notify/auftrag")
 async def onAuftrag():
