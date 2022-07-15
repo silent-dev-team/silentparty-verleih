@@ -14,10 +14,10 @@ services:
     ports: 
       - "${PORTBASE}88:80"
     environment:
-      - CMS = ${CMS}
-      - URL = ${URL}
-      - TG_TOKEN = ${TG_TOKEN}
-      - TG_GROUP = ${TG_GROUP}
+      - CMS=${CMS}
+      - URL=${URL}
+      - TG_TOKEN=${TG_TOKEN}
+      - TG_GROUP=${TG_GROUP}
     
 volumes:
   html:
