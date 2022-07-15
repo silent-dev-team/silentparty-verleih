@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
@@ -5,14 +6,23 @@ from models import *
 from objects.docifyer import Docifyer
 import requests
 
+import os, telegram
+
 URL = 'http://localhost:8000'
 CMS = 'https://cms.silentparty-hannover.de'
 
+
+TG_TOKEN = os.getenv('TG_TOKEN')
+TG_GROUP = int(os.getenv('TG_GROUP')) or None
+
+
 app = FastAPI()
+bot = telegram.Bot(TG_TOKEN)
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
 
 @app.post("/docify/angebot")
 async def docify(angebot: Angebot):
@@ -39,3 +49,8 @@ async def docify(angebot: Angebot):
     return URL+"/parsed_files/"+name
 
 app.mount("/parsed_files", StaticFiles(directory="parsed_files"), name="parsed_files")
+
+@app.post("/notify_auftrag")
+async def onAuftrag():
+    bot.send_message(text="Neue Anfrage über das Ausleihformular!", chat_id=TG_GROUP)
+    return {"message": "done"}
