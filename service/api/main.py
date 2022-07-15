@@ -1,7 +1,6 @@
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
 from models import *
 from objects.docifyer import Docifyer
 import requests
@@ -13,6 +12,11 @@ CMS = os.environ['CMS']
 TG_TOKEN = os.environ['TG_TOKEN']
 TG_GROUP = int(os.environ['TG_GROUP']) or None
 
+f = []
+for (dirpath, dirnames, filenames) in os.walk('./'):
+    f.extend(filenames)
+    break
+print(f)
 
 app = FastAPI()
 bot = telegram.Bot(TG_TOKEN)
@@ -39,7 +43,7 @@ async def docify(angebot: Angebot):
     )
     return r.json() #return URL+"/parsed_files/"+name
 
-app.mount("/parsed_files", StaticFiles(directory="./parsed_files"), name="parsed_files")
+app.mount("/parsed_files", StaticFiles(directory="parsed_files"), name="parsed_files")
 
 @app.post("/notify/auftrag")
 async def onAuftrag():
