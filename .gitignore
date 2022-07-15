@@ -3,3 +3,5 @@ service/templates/.~lock.angebot.docx#
 *lock.*
 *test.docx
 *.env
+*.pyc
+*__pycache__*
