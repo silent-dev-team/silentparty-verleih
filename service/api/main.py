@@ -5,7 +5,7 @@ from models import *
 from objects.docifyer import Docifyer
 import requests
 
-import os, telegram
+import os, telegram, json
 
 URL = os.environ['URL']
 CMS = os.environ['CMS']
@@ -34,7 +34,10 @@ async def docify(angebot: Angebot):
         url = CMS + '/files/import',
         data = directus_import
     )
-    return r.json() #return URL+"/static/"+name
+    res = {}
+    res['directus_import'] = directus_import
+    res['directus_response'] = json.loads(r.json())
+    return res
 
 script_dir = os.path.dirname(__file__)
 st_abs_file_path = os.path.join(script_dir, "static/")
