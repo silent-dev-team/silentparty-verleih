@@ -1,4 +1,4 @@
-import requests, os, json
+import requests
 
 class Directus:
   def __init__(self, url:str):
