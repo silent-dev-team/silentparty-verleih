@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from models import *
 from utils.docifyer import Docifyer
 from utils.directus import Directus
+import utils.transform
 import os
 import telegram
 from datetime import date, time
@@ -26,8 +27,13 @@ async def root():
     return {"message": "Hello World"}
 
 
+@app.get("/varify/anfrage")
+def varify_anfrage(id:str) -> Anfrage:
+    anfrage = Anfrage(directus.get_item(id,'anfrage'))
+    return anfrage
+
 @app.post("/docify/angebot")
-def docify(angebot: Angebot):
+def docify_angebot(angebot: Angebot) -> dict:
     response: dict = {}
     thema: str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
