@@ -24,6 +24,7 @@ async def root():
 
 @app.post("/docify/angebot")
 async def docify(angebot: Angebot):
+    response:dict = {}
     thema:str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
     print("start parsing")
@@ -32,20 +33,26 @@ async def docify(angebot: Angebot):
     print("start saving")
     name = doc.save(path='./static',thema=thema, date=str(date.today()))
     print("saved")
+    
     url:str = URL+"/static/"+name
+    response.update({'url':url})
+    
     print(f'temp-url: {url}')
     print(f'calling Directus')
+    
     r = requests.post(
         url = CMS + '/files/import',
         json = {'url': url}
     )
-    try:
-        print(r.json())
-    except:
-        print(f'response not json')
-    print(f'called Directus')
-    return {'url':url}
     
+    try:
+        response.update(r.json())
+        print(response)
+    except:
+        print(f'no response from directus')
+    
+    print(f'called Directus')
+    return response
 
 @app.post("/notify/auftrag")
 async def onAuftrag():
