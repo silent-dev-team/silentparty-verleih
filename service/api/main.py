@@ -43,7 +43,6 @@ def docify(angebot: Angebot):
     )
     return response
 
-
 @app.post("/notify/auftrag")
 async def onAuftrag():
     bot.send_message(
