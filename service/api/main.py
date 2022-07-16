@@ -35,10 +35,14 @@ async def docify(angebot: Angebot):
     url:str = URL+"/static/"+name
     print(f'temp-url: {url}')
     print(f'calling Directus')
-    requests.post(
+    r = requests.post(
         url = CMS + '/files/import',
         json = {'url': url}
     )
+    try:
+        print(r.json())
+    except:
+        print(f'response not json')
     print(f'called Directus')
     return {'url':url}
     
