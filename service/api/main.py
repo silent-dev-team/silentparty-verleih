@@ -27,18 +27,10 @@ def docify(angebot: Angebot):
     response:dict = {}
     thema:str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
-    print("start parsing")
     doc.run()
-    print("finish parsing")
-    print("start saving")
     name = doc.save(path='./static',thema=thema, date=str(date.today()))
-    print("saved")
-    
     url:str = URL+"/static/"+name
     response.update({'url':url})
-    
-    print(f'temp-url: {url}')
-    print(f'calling Directus')
     
     r = requests.post(
         url = CMS + '/files/import',
@@ -47,11 +39,8 @@ def docify(angebot: Angebot):
     
     try:
         response.update(r.json())
-        print(response)
     except:
-        print(f'no response from directus')
-    
-    print(f'called Directus')
+        response.update({'message':'no response from directus (means "OK")'})
     return response
 
 @app.post("/notify/auftrag")
