@@ -13,6 +13,9 @@ class Directus:
       logging.error('fail to get item')
       return
     
+  def get_file(self):
+    pass
+  
   def import_file(self, url:str, title:str=None) -> dict:
     """Uses the automatic import of directus
     Args:

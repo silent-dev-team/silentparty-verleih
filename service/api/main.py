@@ -28,8 +28,8 @@ async def root():
 
 
 @app.get("/varify/anfrage")
-def varify_anfrage(id:str) -> Anfrage:
-    anfrage = Anfrage(directus.get_item(id,'anfrage'))
+def varify_anfrage(anfrage_id:str) -> Buchung:
+    anfrage = Anfrage(directus.get_item(anfrage_id,'anfrage'))
     return anfrage
 
 @app.post("/docify/angebot")
