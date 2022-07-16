@@ -31,7 +31,7 @@ class Docifyer():
     for p in self.doc.paragraphs:
       p = self._replace_in_paragraph(p)
   
-  def save(self, path:str = None, thema:str= None, date:str = None) -> tuple[str,str]:
+  def save(self, path:str = None, thema:str= None, date:str = None) -> str:
     path = path or self.TEMPORARY_PATH
     name: str = self.name
     if thema:

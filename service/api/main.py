@@ -2,8 +2,9 @@ import logging
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from models import *
-from objects.docifyer import Docifyer
-import requests, os, telegram, json
+from utils.docifyer import Docifyer
+from utils.directus import Directus
+import os, telegram
 from datetime import date, time
 
 URL = os.environ['URL']
@@ -12,6 +13,7 @@ TG_TOKEN = os.environ['TG_TOKEN']
 TG_GROUP = int(os.environ['TG_GROUP']) or None
 
 bot = telegram.Bot(TG_TOKEN)
+directus:Directus = Directus(CMS)
 app = FastAPI()
 
 script_dir = os.path.dirname(__file__)
@@ -32,15 +34,13 @@ def docify(angebot: Angebot):
     url:str = URL+"/static/"+name
     response.update({'url':url})
     
-    r = requests.post(
-        url = CMS + '/files/import',
-        json = {'url': url}
+    response.update(
+        directus.import_file(
+            url = url,
+            title = name.replace('.docx','')
+        )
     )
     
-    try:
-        response.update(r.json())
-    except:
-        response.update({'message':'no response from directus (means "OK")'})
     return response
 
 @app.post("/notify/auftrag")
