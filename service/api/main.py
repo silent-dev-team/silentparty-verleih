@@ -26,22 +26,22 @@ async def root():
 async def docify(angebot: Angebot):
     thema:str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
-    logging.info("start parsing")
+    print("start parsing")
     doc.run()
-    logging.info("finish parsing")
-    logging.info("start saving")
+    print("finish parsing")
+    print("start saving")
     name = doc.save(path='./static',thema=thema, date=str(date.today()))
-    logging.info("saved")
+    print("saved")
     url:str = URL+"/static/"+name
     
-    logging.info(f'temp-url: {url}')
+    print(f'temp-url: {url}')
     
-    logging.info(f'calling Directus')
+    print(f'calling Directus')
     r = requests.post(
         url = CMS + '/files/import',
         json = {'url': 'https://api.silentparty-hannover.de/static/test.txt'}#url}
     )
-    logging.info(f'called Directus')
+    print(f'called Directus')
     
     if r.status_code != 204:
         return r.json()
