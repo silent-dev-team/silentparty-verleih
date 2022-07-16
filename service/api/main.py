@@ -23,7 +23,7 @@ async def root():
     return {"message": "Hello World"}
 
 @app.post("/docify/angebot")
-async def docify(angebot: Angebot):
+def docify(angebot: Angebot):
     response:dict = {}
     thema:str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
