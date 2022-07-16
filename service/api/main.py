@@ -18,13 +18,6 @@ script_dir = os.path.dirname(__file__)
 st_abs_file_path = os.path.join(script_dir, "static/")
 app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 
-async def directus_import(url):
-    requests.post(
-        url = CMS + '/files/import',
-        json = {'url': 'https://api.silentparty-hannover.de/static/test.txt'}#url}
-    )
-    return
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -42,7 +35,10 @@ async def docify(angebot: Angebot):
     url:str = URL+"/static/"+name
     print(f'temp-url: {url}')
     print(f'calling Directus')
-    await directus_import(url)
+    requests.post(
+        url = CMS + '/files/import',
+        json = {'url': url}
+    )
     print(f'called Directus')
     return {'url':url}
     
