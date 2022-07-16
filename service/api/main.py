@@ -44,6 +44,7 @@ def varify_anfrage(anfrage_id:str) -> Buchung:
     anfrage = Anfrage(directus.get_item(anfrage_id,'anfrage'))
     return anfrage
 
+
 @app.post("/docify/angebot")
 def docify_angebot(angebot: Angebot) -> dict:
     response: dict = {}
