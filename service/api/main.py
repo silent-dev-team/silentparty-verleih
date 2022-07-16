@@ -43,8 +43,8 @@ async def docify(angebot: Angebot):
     )
     print(f'called Directus')
     
-    if r.status_code != 204:
-        return r.json()
+    #if r.status_code != 204:
+    #    return r.json()
     
     return {'url':url}
     
