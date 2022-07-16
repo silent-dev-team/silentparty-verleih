@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from models import *
 from objects.docifyer import Docifyer
 import requests, os, telegram, json
-from datetime import date
+from datetime import date, time
 
 URL = os.environ['URL']
 CMS = os.environ['CMS']
@@ -17,6 +17,13 @@ app = FastAPI()
 script_dir = os.path.dirname(__file__)
 st_abs_file_path = os.path.join(script_dir, "static/")
 app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
+
+async def directus_import(url):
+    requests.post(
+        url = CMS + '/files/import',
+        json = {'url': 'https://api.silentparty-hannover.de/static/test.txt'}#url}
+    )
+    return
 
 @app.get("/")
 async def root():
@@ -33,19 +40,10 @@ async def docify(angebot: Angebot):
     name = doc.save(path='./static',thema=thema, date=str(date.today()))
     print("saved")
     url:str = URL+"/static/"+name
-    
     print(f'temp-url: {url}')
-    
     print(f'calling Directus')
-    r = requests.post(
-        url = CMS + '/files/import',
-        json = {'url': 'https://api.silentparty-hannover.de/static/test.txt'}#url}
-    )
+    await directus_import(url)
     print(f'called Directus')
-    
-    #if r.status_code != 204:
-    #    return r.json()
-    
     return {'url':url}
     
 
