@@ -10,12 +10,12 @@ class Docifyer():
   S_REPLACE:list[str] = ["{{","}}"]
   S_FORMULA:list[str] = ["{%","%}"]
   S_TABLE:str = S_FORMULA[0]+'TABLE'+S_FORMULA[1]
-  TEMPLATE_PATH:str = "./templates"
-  TEMPORARY_PATH:str = "./static"
   
-  def __init__(self, name:str, data:dict):
+  def __init__(self, name:str, data:dict, template_path:str, temporary_path:str):
     self.name = name
-    self.doc = Document(self.TEMPLATE_PATH+f'/{self.name}.docx')
+    self.template_path = template_path
+    self.temporary_path = temporary_path
+    self.doc = Document(self.template_path+f'/{self.name}.docx')
     self.data = data
     
   def run(self):
@@ -32,7 +32,7 @@ class Docifyer():
       p = self._replace_in_paragraph(p)
   
   def save(self, path:str = None, thema:str= None, date:str = None) -> str:
-    path = path or self.TEMPORARY_PATH
+    path = path or self.temporary_path
     name: str = self.name
     if thema:
       name += f'_{thema}'
