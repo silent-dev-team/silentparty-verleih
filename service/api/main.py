@@ -1,4 +1,4 @@
-
+import logging
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from models import *
@@ -26,20 +26,28 @@ async def root():
 async def docify(angebot: Angebot):
     thema:str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
     doc = Docifyer(name='angebot', data=angebot.dict())
+    logging.info("start parsing")
     doc.run()
+    logging.info("finish parsing")
+    logging.info("start saving")
     name = doc.save(path='./static',thema=thema, date=str(date.today()))
+    logging.info("saved")
     url:str = URL+"/static/"+name
     
+    logging.info(f'temp-url: {url}')
+    
+    logging.info(f'calling Directus')
     r = requests.post(
         url = CMS + '/files/import',
-        json = {'url': url}
+        json = {'url': 'https://api.silentparty-hannover.de/static/test.txt'}#url}
     )
+    logging.info(f'called Directus')
     
     if r.status_code != 204:
         return r.json()
-    else:
-        return {'url':url}
-
+    
+    return {'url':url}
+    
 
 @app.post("/notify/auftrag")
 async def onAuftrag():
