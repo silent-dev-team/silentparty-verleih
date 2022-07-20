@@ -1,8 +1,20 @@
-import requests
+import requests, logging
 
 class Directus:
   def __init__(self, url:str):
     self.url = self._validate_url(url)
+
+  def get_item(self, id:int|str, collection_name:str) -> dict:
+    r = requests.get(f'{self.url}/content/{collection_name}')
+    try:
+      item:dict = r.json()
+      return item
+    except ValueError:
+      logging.error('fail to get item')
+      return
+    
+  def get_file(self):
+    pass
   
   def import_file(self, url:str, title:str=None) -> dict:
     """Uses the automatic import of directus
@@ -33,7 +45,3 @@ class Directus:
     url = url[:-1] if url[-1] == '/' else url
     url = https + url if https not in url else url.replace(http, https)
     return url
-  
-class Collection:
-  pass
-
