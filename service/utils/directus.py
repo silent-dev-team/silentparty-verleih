@@ -1,11 +1,13 @@
 import requests, logging
 
 class Directus:
-  def __init__(self, url:str):
+  def __init__(self, url:str, token:str=None):
     self.url = self._validate_url(url)
+    self.token = token
+    self.authSufix:str = '?access_token='+token if token else ''
 
   def get_item(self, id:int|str, collection_name:str) -> dict:
-    r = requests.get(f'{self.url}/content/{collection_name}')
+    r = requests.get(f'{self.url}/content/{collection_name}'+ self.authSufix)
     try:
       item:dict = r.json()
       return item
@@ -31,13 +33,16 @@ class Directus:
       payload['data']['title'] = title
     
     r = requests.post(
-        url = self.url + '/files/import',
+        url = self.url + '/files/import' + self.authSufix,
         json = payload
     )
     try:
       return r.json()
     except:
       return {'message':'no response from directus (means "OK")'}
+    
+  def _url(self, route:str):
+    return self.url + route + self.authSufix
   
   def _validate_url(self, url:str):
     https:str = 'https://'

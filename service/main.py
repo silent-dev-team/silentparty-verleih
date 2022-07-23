@@ -14,6 +14,7 @@ URL = os.environ['URL']
 CMS = os.environ['CMS']
 TG_TOKEN = os.environ['TG_TOKEN']
 TG_GROUP = int(os.environ['TG_GROUP']) or None
+TOKEN_SERVICE = os.environ['TOKEN_SERVICE']
 
 TEMPLATE_PATH:str = "./templates"
 TEMPORARY_PATH:str = "./static"
