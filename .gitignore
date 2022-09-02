@@ -5,3 +5,4 @@ service/templates/.~lock.angebot.docx#
 *.env
 *.pyc
 *__pycache__*
+*/None

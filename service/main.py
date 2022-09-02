@@ -39,13 +39,6 @@ app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 async def root():
     return {"message": "Hello World"}
 
-
-@app.get("/varify/anfrage")
-def varify_anfrage(anfrage_id:str) -> Buchung:
-    anfrage = Anfrage(directus.get_item(anfrage_id,'anfrage'))
-    return anfrage
-
-
 @app.post("/docify/angebot")
 def docify_angebot(angebot: Angebot) -> dict:
     response: dict = {}
