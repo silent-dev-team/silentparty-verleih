@@ -10,7 +10,7 @@ import telegram
 from datetime import date, time
 
 ### CONSTS ###
-
+print(os.environ)
 URL = os.environ['URL']
 CMS = os.environ['CMS']
 TOKEN_SERVICE = os.environ['TOKEN_SERVICE']
