@@ -44,7 +44,14 @@ async def root():
 def docify_angebot(angebot: Angebot) -> dict:
     response: dict = {}
     thema: str = angebot.organisation if angebot.organisation != "" else angebot.vertreter_nname
-    doc = Docifyer(name='angebot', data=angebot.dict(), template_path=TEMPLATE_PATH, temporary_path=TEMPORARY_PATH)
+    
+    doc = Docifyer(
+        name='angebot', 
+        data=angebot.dict(), 
+        template_path=TEMPLATE_PATH, 
+        temporary_path=TEMPORARY_PATH
+    )
+    
     doc.run()
     name = doc.save(path=TEMPORARY_PATH, thema=thema, date=str(date.today()))
     url: str = URL+TEMPORARY_PATH[:2]+"/"+name
