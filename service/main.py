@@ -88,8 +88,8 @@ def clear():
         return error_response
     return {"message":"done"}
 
-#@app.post("/notify/auftrag")
-#async def onAuftrag():
-#    bot.send_message(
-#        text="Neue Anfrage über das Ausleihformular!", chat_id=TG_GROUP)
-#    return {"message": "done"}
+@app.post("/notify/auftrag")
+async def onAuftrag():
+    bot.send_message(
+        text="Neue Anfrage über das Ausleihformular!", chat_id=TG_GROUP)
+    return {"message": "done"}
