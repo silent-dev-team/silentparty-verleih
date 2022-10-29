@@ -1,0 +1,137 @@
+{
+  "main": {
+    "id": "a60d2dd61257e59e",
+    "type": "split",
+    "children": [
+      {
+        "id": "c9ebfc0076491154",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Readme.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "cc7d1caea803e710",
+    "type": "split",
+    "children": [
+      {
+        "id": "d6b3a551d3de96bb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "aa1a9a71869500d3",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "e9422a378711c629",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "08613ed7f311a6c0",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "38f8b72089164f54",
+    "type": "split",
+    "children": [
+      {
+        "id": "cdf5675ec8832eb5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ae6c950a76f8155d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Readme.md",
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "7121cc8055201445",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Readme.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "6bc0d4a936d1f577",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": false
+              }
+            }
+          },
+          {
+            "id": "3ea3ca0679fbbaa0",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Readme.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "active": "c9ebfc0076491154",
+  "lastOpenFiles": [
+    "service/FastAPI.md",
+    "service/utils/Unterprogramme.md",
+    "Readme.md",
+    "[Unterprogramme.md"
+  ]
+}
