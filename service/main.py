@@ -54,8 +54,9 @@ def docify_angebot(angebot: Angebot) -> dict:
     
     doc.run()
     name = doc.save(path=TEMPORARY_PATH, thema=thema, date=str(date.today()))
-    url: str = URL+TEMPORARY_PATH[:2]+"/"+name
+    url: str = URL+TEMPORARY_PATH[1:]+"/"+name
     #response.update({'url': url})
+    print(f'Lokale URL des Dokuments: {name}')
     response.update(
         directus.import_file(
             url=url,
