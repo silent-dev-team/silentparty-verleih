@@ -19,6 +19,7 @@ services:
       - URL=${URL}
       - TG_TOKEN=${TG_TOKEN}
       - TG_GROUP=${TG_GROUP}
+      - TOKEN_SERVICE=${TOKEN_SERVICE}
     
 volumes:
   html:
