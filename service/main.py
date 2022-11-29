@@ -1,11 +1,12 @@
 from distutils.log import error
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from models import *
 from utils.docifyer import Docifyer
 from utils.directus import Directus
 import utils.transform
-import os, shutil
+import os, shutil, requests
 import telegram
 from datetime import date, time
 
@@ -39,6 +40,20 @@ app.mount("/static", StaticFiles(directory=st_abs_file_path), name="static")
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/trigger/{flow_id}")
+async def trigger(flow_id:str, request: Request):
+    query_params = dict(request.query_params)
+    url = f"{CMS}flows/trigger/{flow_id}"
+    if query_params:
+        url += "?"
+        for key, value in query_params.items():
+            url += f"{key}={value}&"
+        url = url[:-1]
+    r = requests.get(url)
+    redirect_url:str =  r.json()["url"]
+    return RedirectResponse(redirect_url)
 
 @app.post("/docify/angebot")
 def docify_angebot(angebot: Angebot) -> dict:
