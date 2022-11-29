@@ -55,6 +55,7 @@ class Abholung(BaseModel):
   plz:  str | None = ''
   ort:  str | None = ''
   date:  str | None = ''
+  event_date:  str | None = ''
   r_num:  str | None = ''
   d_nutzung_start:  str | None = ''
   p_reinigung: int = 0
