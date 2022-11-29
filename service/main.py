@@ -45,7 +45,7 @@ async def root():
 @app.get("/trigger/{flow_id}")
 async def trigger(flow_id:str, request: Request):
     query_params = dict(request.query_params)
-    url = f"{CMS}flows/trigger/{flow_id}"
+    url = f"{CMS}/flows/trigger/{flow_id}"
     if query_params:
         url += "?"
         for key, value in query_params.items():
