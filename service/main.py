@@ -81,6 +81,33 @@ def docify_angebot(angebot: Angebot) -> dict:
     )
     return response
 
+@app.post("/docify/rechnung")
+def docify_angebot(rechnung: Rechnung) -> dict:
+    response: dict = {}
+    thema: str = rechnung.organisation if rechnung.organisation != "" else rechnung.vertreter_nname
+    
+    doc = Docifyer(
+        name='rechnung', 
+        data=rechnung.dict(), 
+        template_path=TEMPLATE_PATH, 
+        temporary_path=TEMPORARY_PATH
+    )
+    
+    doc.run()
+    name = doc.save(path=TEMPORARY_PATH, thema=thema, date=str(date.today()))
+    url: str = URL+TEMPORARY_PATH[1:]+"/"+name
+    #response.update({'url': url})
+    print(f'Lokale URL des Dokuments: {name}')
+    response.update(
+        directus.import_file(
+            url=url,
+            title=name.replace('.docx', '').replace(' ','_').replace('.',''),
+            folder='896a8bba-29f7-4a02-b5e2-1807d9be015e'
+        )
+    )
+    return response
+
+
 @app.post("/docify/clear_static_files")
 def clear():
     err:bool = False
