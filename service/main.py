@@ -159,6 +159,7 @@ def clear():
 
 @app.post("/notify/auftrag")
 async def onAuftrag():
-    bot.send_message(
-        text="Neue Anfrage über das Ausleihformular!", chat_id=TG_GROUP)
+    await bot.send_message(
+        text="Neue Anfrage über das Ausleihformular!", chat_id=TG_GROUP
+    )
     return {"message": "done"}
