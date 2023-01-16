@@ -5,6 +5,7 @@ from docx.table import Table, _Row, _Cell
 from docx.styles.style import _ParagraphStyle,_CharacterStyle
 from copy import deepcopy
 
+
 class Docifyer():
   
   S_REPLACE:list[str] = ["{{","}}"]
@@ -46,20 +47,26 @@ class Docifyer():
   def _btwn(self, text,sep:list[str]=None):
     sep = sep or self.S_REPLACE
     return f'{sep[0]}{text}{sep[1]}'
+  
+  def _to_str(self, text):
+    if type(text) == float:
+      return f'{text:.2f}'
+    return str(text)
 
   def _replace_text(self, text:str, backbone:dict, parentKey:str=None, enumeration:int=None) -> str:
     if self.S_REPLACE[0] not in text and self.S_REPLACE[1] not in text:
       return text
+    value: str | int | float | list | dict
     for key, value in backbone.items():
-      if key in text:
+      if key in text: #TODO: pipe-operator einbauen!
         text_types = [str,int,float]
         if type(value) in text_types:
-          text = text.replace(self._btwn(key), str(value))
+          text = text.replace(self._btwn(key), self._to_str(value))
           if parentKey:
             if enumeration:
-              text = text.replace(self._btwn(f'{parentKey}[{enumeration}].{key}'), str(value))
+              text = text.replace(self._btwn(f'{parentKey}[{enumeration}].{key}'), self._to_str(value))
             else:
-              text = text.replace(self._btwn(f'{parentKey}.{key}'), str(value))
+              text = text.replace(self._btwn(f'{parentKey}.{key}'), self._to_str(value))
         elif type(value) == list:
           for i,e in enumerate(value):
             text = self._replace_text(text, e, parentKey=key, enumeration=i+1)
@@ -74,6 +81,14 @@ class Docifyer():
       run.text = text
     return p
 
+  def _get_options(self, text:str) -> list | None: #TODO: einbauen!
+    if '|' not in text:
+      return None
+    start: int = text.find('|')+1
+    end: int = text.find(self.S_REPLACE[1])
+    param_s = text[start:end].replace(' ','')
+    params = param_s.split(',')
+    return params
 
   def _iterate_table(self, table:Table):
     def remove_row(table:Table, row:_Row | None):
