@@ -96,6 +96,21 @@ services:
       - extensions:/dist
     depends_on:
       - directus
+  
+  backup:
+    restart: always
+    image: backup
+    build: ./backup
+    volumes:
+      - backups:/backups
+    networks:
+      - directus
+    environment:
+      DB_HOST: 'database'
+      DB_PORT: '5432'
+      DB_DATABASE: 'directus'
+      DB_USER: 'directus'
+      DB_PASSWORD: '${DB_PASSWORD}'
 
 networks:
   directus:
@@ -105,3 +120,4 @@ volumes:
   uploads:
   db:
   extensions:
+  backups:
