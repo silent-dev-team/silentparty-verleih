@@ -6,10 +6,18 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxt/devtools',
-    "nuxt-directus"
+    'nuxt-directus',
+    '@pinia/nuxt',
   ],
   directus: {
     url: 'http://cms.silentparty-hannover.de/',
+  },
+  pinia: {
+    autoImports: [
+      // automatically imports `defineStore`
+      'defineStore', // import { defineStore } from 'pinia'
+      ['defineStore', 'definePiniaStore'], // import { defineStore as definePiniaStore } from 'pinia'
+    ],
   },
   css: [
     '@/assets/style/main.scss',
