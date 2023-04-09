@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     url: 'http://cms.silentparty-hannover.de/',
   },
   css: [
+    '@/assets/style/main.scss',
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css',
   ],
