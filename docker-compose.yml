@@ -21,6 +21,12 @@ services:
       - TG_GROUP=${TG_GROUP}
       - TOKEN_SERVICE=${TOKEN_SERVICE}
 
+  webapp:
+    image: webapp:0.0.1
+    build: ./WarehouseManager
+    ports:
+      - '${PORTBASE}81:3000'
+    restart: always
   
   database:
     restart: always
