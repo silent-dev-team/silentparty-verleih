@@ -54,6 +54,7 @@ services:
     volumes:
       - uploads:/directus/uploads
       - ${EXTENSION_VOLUME}:/directus/extensions
+      - ./templates/email:/directus/extensions/templates
     networks:
       - directus
     depends_on:
