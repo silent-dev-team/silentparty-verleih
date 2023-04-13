@@ -5,7 +5,7 @@ export default defineOperationApp({
 	name: 'Templater',
 	icon: 'box',
 	description: 'This is the templater operation!',
-	overview: ({ data, template }) => [
+	overview: ({ text }) => [
 		{
       label: "Data",
       data
