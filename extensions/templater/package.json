@@ -11,8 +11,8 @@
 	"directus:extension": {
 		"type": "operation",
 		"path": {
-			"app": "dist/app.js",
-			"api": "dist/api.js"
+			"app": "../dist/operations/templater/app.js",
+			"api": "../dist/operations/templater/api.js"
 		},
 		"source": {
 			"app": "src/app.ts",
@@ -30,5 +30,9 @@
 		"@types/node": "^18.15.11",
 		"typescript": "^5.0.4",
 		"vue": "^3.2.47"
+	},
+	"dependencies": {
+		"adm-zip": "^0.5.10",
+		"xmldom": "^0.6.0"
 	}
 }
