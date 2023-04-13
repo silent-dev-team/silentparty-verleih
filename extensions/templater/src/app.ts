@@ -1,25 +1,38 @@
 import { defineOperationApp } from '@directus/extensions-sdk';
 
 export default defineOperationApp({
-	id: 'custom',
-	name: 'Custom',
+	id: 'templater',
+	name: 'Templater',
 	icon: 'box',
-	description: 'This is my custom operation!',
-	overview: ({ text }) => [
+	description: 'This is the templater operation!',
+	overview: ({ data, template }) => [
 		{
-			label: 'Text',
-			text: text,
-		},
-	],
-	options: [
-		{
-			field: 'text',
-			name: 'Text',
-			type: 'string',
-			meta: {
-				width: 'full',
-				interface: 'input',
-			},
-		},
+      label: "Data",
+      data
+    },
+    {
+      label: "Template ID",
+      template
+    },
+  ],
+  options: [
+    {
+      field: "data",
+      name: "Daten",
+      type: "string",
+      meta: {
+        width: "full",
+        interface: "input"
+      }
+    },
+    {
+      field: "template",
+      name: "Template",
+      type: "string",
+      meta: {
+        width: "full",
+        interface: "input"
+      }
+    }
 	],
 });
