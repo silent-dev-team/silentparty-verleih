@@ -7,9 +7,9 @@ export class TemplateBuilder{
     private serializer = new XMLSerializer();
     private zip: AdmZip;
 
-    xml: Document;
+    public xml: Document;
 
-    constructor(templateOTT: string, private data:TemplateData) {
+    constructor(templateOTT: Buffer, private data:TemplateData) {
         this.zip = new AdmZip(templateOTT);
         const xmlEntry = this.zip.getEntries().find(entry => entry.entryName === 'content.xml');
         if (!xmlEntry) {

@@ -5,7 +5,7 @@ export default defineOperationApp({
 	name: 'Templater',
 	icon: 'box',
 	description: 'This is the templater operation!',
-	overview: ({ text }) => [
+	overview: ({ data, template }) => [
 		{
       label: "Data",
       data
@@ -19,7 +19,7 @@ export default defineOperationApp({
     {
       field: "data",
       name: "Daten",
-      type: "string",
+      type: "json",
       meta: {
         width: "full",
         interface: "input"
