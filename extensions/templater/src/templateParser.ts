@@ -1,4 +1,4 @@
-import * as AdmZip from "adm-zip";
+import { AdmZip } from "adm-zip";
 import {XMLSerializer,DOMParser } from "xmldom";
 import { TemplateData } from "./types";
 

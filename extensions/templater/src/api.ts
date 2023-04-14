@@ -1,6 +1,7 @@
 import { defineOperationApi } from '@directus/extensions-sdk';
 import { Stream } from 'stream';
 import { TemplateBuilder } from './templateParser';
+import * as AdmZip from "adm-zip";
 
 type Options = {
 	text: string;
@@ -27,7 +28,11 @@ export default defineOperationApi<Options>({
 		const buff = await stream2buffer(asset.stream);
 		console.log(buff); // das funktioniert bis hierhin
 
-		const templater = new TemplateBuilder(buff, data); // hier kommt kommen wir nicht weiter
+		const amdzip = AdmZip.default; // das hier in den TemplateBuilder übernehmen
+		const zip = new amdzip(buff);
+		console.log(zip); //-> { readFile: ... }
+
+		const templater = new TemplateBuilder(buff, {'values': {}}); // hier kommt kommen wir nicht weiter
 		/*
 			evtl. funktoioniert der buffer nicht als input für den Templater
 			evtl. sind die dipendensies nicht richtig installiert
