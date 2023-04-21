@@ -29,6 +29,8 @@ export default defineOperationApi<Options>({
 
 		console.log(templater.xml);
 
+		// Hier muss eine neue File erzeugt werden, die dann als Asset zurückgegeben wird
+
 		return {'asset':templateAsset, 'buffer': buff};
 	}
 });
