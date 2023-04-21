@@ -1,4 +1,4 @@
-import { AdmZip } from "adm-zip";
+import * as AdmZip from "adm-zip";
 import {XMLSerializer,DOMParser } from "xmldom";
 import { TemplateData } from "./types";
 
@@ -9,8 +9,9 @@ export class TemplateBuilder{
 
     public xml: Document;
 
-    constructor(templateOTT: Buffer, private data:TemplateData) {
-        this.zip = new AdmZip(templateOTT);
+    constructor(buff: Buffer, private data:TemplateData) {
+        const amdzip = AdmZip.default;
+        this.zip = new amdzip(buff);
         const xmlEntry = this.zip.getEntries().find(entry => entry.entryName === 'content.xml');
         if (!xmlEntry) {
             throw new Error('No content.xml found in template');

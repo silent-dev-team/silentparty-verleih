@@ -22,26 +22,13 @@ export default defineOperationApi<Options>({
 	handler: async ({ data, template}, { services }) => {
 		const { AssetsService } = services;
 		const assets = new AssetsService({accountability: {admin: true, role: null, permissions: []}});
-		//return {'data': data, 'template': template, 'assets': assets}
-		//console.log(assets);
-		const asset = await assets.getAsset('2b40920f-d240-426d-a0a0-f36d591496ef',{})
-		const buff = await stream2buffer(asset.stream);
-		console.log(buff); // das funktioniert bis hierhin
+		const templateAsset = await assets.getAsset('2b40920f-d240-426d-a0a0-f36d591496ef',{})
+		const buff = await stream2buffer(templateAsset.stream);
 
-		const amdzip = AdmZip.default; // das hier in den TemplateBuilder übernehmen
-		const zip = new amdzip(buff);
-		console.log(zip); //-> { readFile: ... }
-
-		const templater = new TemplateBuilder(buff, {'values': {}}); // hier kommt kommen wir nicht weiter
-		/*
-			evtl. funktoioniert der buffer nicht als input für den Templater
-			evtl. sind die dipendensies nicht richtig installiert
-		*/
+		const templater = new TemplateBuilder(buff, {'values': {}}); 
 
 		console.log(templater.xml);
-		return {'asset':asset, 'buffer': buff};
-		//assets.getAsset(id='2b40920f-d240-426d-a0a0-f36d591496ef').then((asset) => {
-		//	console.log(asset);
-		//});
+
+		return {'asset':templateAsset, 'buffer': buff};
 	}
 });
