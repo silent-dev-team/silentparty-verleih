@@ -30,6 +30,8 @@ export default defineOperationApi<Options>({
 		console.log(templater.xml);
 
 		// Hier muss eine neue File erzeugt werden, die dann als Asset zurückgegeben wird
+		// -> https://github.com/directus/directus/blob/main/api/src/services/files.ts
+		// -> createOne
 
 		return {'asset':templateAsset, 'buffer': buff};
 	}
