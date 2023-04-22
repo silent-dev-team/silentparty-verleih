@@ -42,7 +42,7 @@ export default defineOperationApi<Options>({
 			filename_download : "test.odt",
 			storage: "local", 
 			folder: "baeacbe3-3779-4ce4-8c5b-d51b8318ceea",
-			//type: "application/vnd.oasis.opendocument.text-template"
+			type: "application/vnd.oasis.opendocument.text-template"
 		});
 		// damn, das klappt noch nicht
 		console.log('file created');
