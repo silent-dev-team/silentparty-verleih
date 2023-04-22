@@ -1,17 +1,23 @@
 {
-	"name": "directus-extension-greet",
+	"name": "directus-extension-test",
 	"description": "Please enter a description for your extension",
 	"icon": "extension",
 	"version": "1.0.0",
 	"keywords": [
 		"directus",
 		"directus-extension",
-		"directus-custom-endpoint"
+		"directus-custom-operation"
 	],
 	"directus:extension": {
-		"type": "endpoint",
-		"path": "../dist/endpoints/greet/index.js",
-		"source": "src/index.js",
+		"type": "operation",
+		"path": {
+			"app": "dist/app.js",
+			"api": "dist/api.js"
+		},
+		"source": {
+			"app": "src/app.ts",
+			"api": "src/api.ts"
+		},
 		"host": "^9.23.1"
 	},
 	"scripts": {
@@ -20,6 +26,9 @@
 		"link": "directus-extension link"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "9.23.1"
+		"@directus/extensions-sdk": "9.23.1",
+		"@types/node": "^18.15.13",
+		"typescript": "^5.0.4",
+		"vue": "^3.2.47"
 	}
 }

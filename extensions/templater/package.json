@@ -18,7 +18,7 @@
 			"app": "src/app.ts",
 			"api": "src/api.ts"
 		},
-		"host": "^9.23.1"
+		"host": "^9.25.2"
 	},
 	"scripts": {
 		"build": "directus-extension build",
@@ -26,7 +26,7 @@
 		"link": "directus-extension link"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "9.23.1",
+		"@directus/extensions-sdk": "9.25.2",
 		"@types/node": "^18.15.11",
 		"typescript": "^5.0.4",
 		"vue": "^3.2.47"
