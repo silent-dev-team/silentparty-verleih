@@ -1,6 +1,7 @@
 import * as AdmZip from "adm-zip";
 import {XMLSerializer,DOMParser } from "xmldom";
 import { TemplateData } from "./types";
+import { Readable } from 'stream'
 
 export class TemplateBuilder{
     private parser = new DOMParser();
@@ -112,6 +113,17 @@ export class TemplateBuilder{
         }
     }
 
+    toBuffer():Buffer{
+        const modifiedXmlString = this.serializer.serializeToString(this.xml);
+        this.zip.updateFile('content.xml', Buffer.from(modifiedXmlString));
+        return this.zip.toBuffer();
+    }
+
+    toStream():Readable {
+        const modifiedXmlString = this.serializer.serializeToString(this.xml);
+        this.zip.updateFile('content.xml', Buffer.from(modifiedXmlString));
+        return Readable.from(this.zip.toBuffer());
+    }
 
     save(filename: string ) {
         const modifiedXmlString = this.serializer.serializeToString(this.xml);

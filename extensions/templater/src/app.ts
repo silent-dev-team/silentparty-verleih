@@ -5,14 +5,22 @@ export default defineOperationApp({
 	name: 'Templater',
 	icon: 'box',
 	description: 'This is the templater operation!',
-	overview: ({ data, template }) => [
+	overview: ({ data, filename, templateId, folderId }) => [
 		{
       label: "Data",
       data
     },
     {
+      label: "Filename",
+      filename
+    },
+    {
       label: "Template ID",
-      template
+      templateId
+    },
+    {
+      label: "Folder ID",
+      folderId
     },
   ],
   options: [
@@ -26,8 +34,26 @@ export default defineOperationApp({
       }
     },
     {
-      field: "template",
-      name: "Template",
+      field: "filename",
+      name: "Filename",
+      type: "string",
+      meta: {
+        width: "full",
+        interface: "input"
+      }
+    },
+    {
+      field: "templateId",
+      name: "Template ID",
+      type: "string",
+      meta: {
+        width: "full",
+        interface: "input"
+      }
+    },
+    {
+      field: "folderId",
+      name: "Folder ID",
       type: "string",
       meta: {
         width: "full",

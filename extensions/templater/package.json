@@ -12,7 +12,7 @@
 		"type": "operation",
 		"path": {
 			"app": "../dist/operations/templater/app.js",
-			"api": "../dist/operations/templater/api.js"
+			"api": "../dist/operations/templater/api.cjs"
 		},
 		"source": {
 			"app": "src/app.ts",

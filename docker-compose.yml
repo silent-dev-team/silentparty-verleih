@@ -64,6 +64,7 @@ services:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
       CORS_ENABLED: 'true'
+      LOG_LEVEL: 'debug'
 
       DB_CLIENT: 'pg'
       DB_HOST: 'database'

@@ -18,38 +18,30 @@ async function stream2buffer(stream: Stream): Promise<Buffer> {
 
 export default defineOperationApi<Options>({
 	id: 'templater',
-	handler: async ({ data, template }, { services }) => {
+	handler: async ({ data, filename, templateId, folderId }, { services, getSchema }) => {
 		const { AssetsService, FilesService } = services;
 		const assets = new AssetsService({accountability: {admin: true, role: null, permissions: []}});
-		const templateAsset = await assets.getAsset('2b40920f-d240-426d-a0a0-f36d591496ef',{})
-		//console.log(templateAsset.file);
+		const templateAsset = await assets.getAsset(templateId,{})
 		const buff = await stream2buffer(templateAsset.stream);
 
-		const templater = new TemplateBuilder(buff, {'values': {}}); 
-		//console.log(templater.xml);
-
-		//console.log(templater.xml);
-
-		// Hier muss eine neue File erzeugt werden, die dann als Asset zurückgegeben wird
-		// -> https://github.com/directus/directus/blob/main/api/src/services/files.ts
-		// -> createOne
+		const templater = new TemplateBuilder(buff, data); 
 
 		console.log('template builded');
-		const files = new FilesService({accountability: {admin: true, role: null, permissions: []}});
+		const files = new FilesService({schema: await getSchema(),accountability: {admin: true, role: null, permissions: []}});
 		console.log('files works');
-		//const primKey = await files.uploadOne(templateStream,file); // ruft createOne auf, daher testen wir damit erstmal
-		const primKey = await files.createOne({
-			filename_download : "test.odt",
+		const primKey = await files.uploadOne(
+			templater.toStream(),
+			{
+			title: filename,
+			filename_download : filename,
+			//filename_disk: filename,
 			storage: "local", 
-			folder: "baeacbe3-3779-4ce4-8c5b-d51b8318ceea",
+			folder: folderId,
 			type: "application/vnd.oasis.opendocument.text-template"
 		});
-		// damn, das klappt noch nicht
 		console.log('file created');
 
 		console.log(primKey);
-
-
-		return {'asset':templateAsset, 'buffer': buff};
+		return {newFile: primKey};
 	}
 });
