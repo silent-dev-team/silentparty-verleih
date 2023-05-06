@@ -42,7 +42,7 @@ services:
 
   directus:
     restart: always
-    image: directus/directus:latest
+    image: directus/directus:9.26
     ports:
       - '${PORTBASE}55:8055'
     volumes:
