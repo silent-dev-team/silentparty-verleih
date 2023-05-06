@@ -1,0 +1,26 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "nuxt": "^3.3.3"
+  },
+  "dependencies": {
+    "@artmizu/yandex-metrika-nuxt": "^1.0.1",
+    "@mdi/font": "^7.2.96",
+    "@nuxt/devtools": "^0.3.2",
+    "@nuxtjs/google-fonts": "^3.0.0",
+    "@pinia/nuxt": "^0.4.8",
+    "@vueuse/nuxt": "^9.13.0",
+    "nuxt-directus": "^5.1.1",
+    "pinia": "^2.0.34",
+    "sass": "^1.61.0",
+    "vuetify": "^3.1.4"
+  }
+}

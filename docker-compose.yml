@@ -21,6 +21,12 @@ services:
       - TG_GROUP=${TG_GROUP}
       - TOKEN_SERVICE=${TOKEN_SERVICE}
 
+  webapp:
+    image: webapp:0.0.1
+    build: ./WarehouseManager
+    ports:
+      - '${PORTBASE}81:3000'
+    restart: always
   
   database:
     restart: always
@@ -48,6 +54,7 @@ services:
     volumes:
       - uploads:/directus/uploads
       - ${EXTENSION_VOLUME}:/directus/extensions
+      - ./templates/email:/directus/extensions/templates
     networks:
       - directus
     depends_on:
@@ -57,6 +64,7 @@ services:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
       CORS_ENABLED: 'true'
+      LOG_LEVEL: 'debug'
 
       DB_CLIENT: 'pg'
       DB_HOST: 'database'
