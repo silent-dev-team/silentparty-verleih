@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   ssr: true,
   routeRules: {
-    '*/...': {ssr: false},
+    '*/checkout': {ssr: false},
   },
   modules: [
     '@nuxt/devtools',

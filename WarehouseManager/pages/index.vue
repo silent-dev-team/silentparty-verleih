@@ -1,4 +1,3 @@
-import { useCounterStore } from '../stores/sharedCounter';
 <script setup lang="ts">
 import { useCounterStore } from '../stores/sharedCounter';
 
