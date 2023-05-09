@@ -1,4 +1,5 @@
 <script setup>
+import { setMapStoreSuffix } from 'pinia';
 import QrScanner from 'qr-scanner';
 const { getItems, updateItem } = useDirectusItems();
 
@@ -24,6 +25,7 @@ const getBoxes = async() => {
 }
 const boxes = await getBoxes();
 
+const blink = ref(false);
 
 const mode = ref('add'); // null, add, remove
 
@@ -35,9 +37,11 @@ const qrBox = computed(() => codes.value.find(item => item.startsWith('K')) || '
 if (process.client) {
   const vid = window.document.getElementById('qr-video');
   const qrScanner = new QrScanner(vid, result => {
-    console.log(result);
     if ( mode.value == 'add' ){
+      if (codes.value.includes(result)) return;
       codes.value.unshift(result);
+      blink.value = true;
+      setTimeout(() => blink.value = false, 300);
     } else if ( mode.value == 'remove' ) {
       codes.value = codes.value.filter(item => item != result);
     }
@@ -65,14 +69,14 @@ function bind() {
 </script>
 
 <template>
-    <video id="qr-video" class="video"></video>
+    <video id="qr-video" :class="`video ${blink?'blink':''}`"></video>
     <div class="mode">
       <v-btn v-if="mode != 'remove' && mode != 'null'" class="mx-2" icon="mdi-plus-circle" variant="plain" color="success" @click="mode = 'remove'"></v-btn>
       <v-btn v-if="mode != 'add' && mode != 'null'" class="mx-2" icon="mdi-minus-circle" variant="plain" color="error" @click="mode = 'add'"></v-btn>
     </div>
     <div class="history">
       <div v-for="item, i in codes">
-        <v-card class="mx-auto my-1 text-center" :style="`background-color: rgba(255,255,255,${1 - i*0.2}); color: rgba(1,1,1,${1 - i*0.15});`">
+        <v-card :class="`mx-auto my-1 text-center toast ${i==0?'big':'0'}`" :style="`background-color: rgba(255,255,255,${1 - i*0.2}); color: rgba(1,1,1,${1 - i*0.15});`">
           <p>{{ item }}</p>
         </v-card>
       </div>
@@ -93,7 +97,14 @@ function bind() {
 .video {
   height: 100vh;
   position: fixed;
+  transition: all 0.15s ease-in-out; 
+  filter:brightness(1);
 }
+
+.blink {
+  filter:brightness(5);
+}
+
 .history {
   position: fixed;
   top: 0;
@@ -113,7 +124,18 @@ function bind() {
   background-color: transparent;
   overflow: hidden;
 }
+.big{
+  animation: scaleDown 0.5s ease-in-out;
+}
 
+@keyframes scaleDown {
+  0% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 .card {
   background-color: rgba(255,255,255,1);
   color: rgba(1,1,1,1);
