@@ -27,7 +27,15 @@ services:
     ports:
       - '${PORTBASE}81:3000'
     restart: always
-  
+
+  extension-builder:
+    image: extension-builder:rc-_-build
+    build: ./extensions
+    volumes:
+      - extensions:/dist
+    depends_on:
+      - directus
+
   database:
     restart: always
     image: postgis/postgis:13-master
@@ -60,6 +68,7 @@ services:
     depends_on:
       - cache
       - database
+      - extension-builder
     environment:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
@@ -96,14 +105,6 @@ services:
       # Make sure to set this in production
       # (see https://docs.directus.io/reference/environment-variables/#general)
       PUBLIC_URL: 'https://${PUBLIC_URL}'
-
-  extension-builder:
-    image: extension-builder:rc-_-build
-    build: ./extensions
-    volumes:
-      - extensions:/dist
-    depends_on:
-      - directus
   
   backup:
     restart: always
