@@ -6,6 +6,36 @@ const mode = ref('add'); // null, add, remove
 
 const items = ref([]);
 
+const getOrders = async () => {
+  return await getItems({
+    collection: 'order',
+    params: {
+      filter: {
+        status: {
+          _eq: "offer_accepted"
+        }
+      }
+    }
+  });
+}
+
+const getOffer = async (id) => {
+  return await getItemById({
+    collection: 'offer',
+    id: id
+  });
+}
+
+function loadOffer(orderId) {
+  getOffer(orders.find(order => order.id == orderId).offer).then(off => {
+    offer.value = off;
+  })
+}
+
+const orders = await getOrders();
+const selectedOrder = ref(null);
+const offer = ref(null);
+
 if (process.client) {
   const vid = window.document.getElementById('qr-video');
   const qrScanner = new QrScanner(vid, result => {
@@ -13,6 +43,8 @@ if (process.client) {
     items.value.unshift({ code: result });
   });
   qrScanner.start();
+
+
 }
 
 
@@ -33,8 +65,28 @@ if (process.client) {
     </div>
     <v-card class="card">
       <v-card-title>Checkout</v-card-title>
+      <v-card-text>
+        {{ orders }}
+        {{ selectedOrder }}
+        {{ offer }}
+      </v-card-text>
+      <v-select
+        class="mx-3"
+        variant="outlined"
+        label="Auftrag"
+        v-model="selectedOrder"
+        :items="orders.map(order => order.organisation)"
+        :disabled="orders.length == 0"
+      ></v-select>
+      <v-btn class="mx-3" color="success" :disabled="selectedOrder == null" @click="loadOffer(orders.find(order => order.organisation == selectedOrder).id)">
+        Auftrag laden
+      </v-btn>
+      <p class="ma-5">
+        Kopfhörer: {{ offer?.n_headphones }} <br>
+        Sender: {{ offer?.n_transmitter }}
+      </p>
       <v-card-actions id="actions">
-        <ShowAllItems />
+        
       </v-card-actions>
     </v-card>
 </template>
