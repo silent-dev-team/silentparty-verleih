@@ -26,7 +26,6 @@ const getBoxes = async() => {
 const boxes = await getBoxes();
 
 const blink = ref(false);
-
 const mode = ref('add'); // null, add, remove
 
 const codes = ref([]);
