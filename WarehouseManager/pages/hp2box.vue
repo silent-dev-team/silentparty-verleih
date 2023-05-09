@@ -5,6 +5,10 @@ const { getItems, updateItem } = useDirectusItems();
 const getHeadphones = async() => {
   return await getItems({
     collection: 'headphones',
+    params: {
+      fields: 'id,qr,box',
+      limit: -1
+    }
   });
 }
 const headphones = await getHeadphones();
@@ -12,6 +16,10 @@ const headphones = await getHeadphones();
 const getBoxes = async() => {
   return await getItems({
     collection: 'boxes',
+    params: {
+      fields: 'id,qr,box',
+      limit: -1
+    }
   });
 }
 const boxes = await getBoxes();
@@ -38,11 +46,10 @@ if (process.client) {
 }
 
 function bind() {
-  console.log(qrBox.value, qrHeadphones.value);
-  const boxId = boxes.find(item => item.qr == qrBox.value).id;
+  const boxId = boxes.find(box => box.qr == qrBox.value).id;
   for ( let i = 0; i < qrHeadphones.value.length; i++ ) {
     const code = qrHeadphones.value[i];
-    const hpId = headphones.find(item => item.qr == code).id;
+    const hpId = headphones.find(hp => hp.qr == code).id;
     console.log(hpId,'->', boxId);
     updateItem({
       collection: 'headphones',
@@ -52,6 +59,7 @@ function bind() {
       }
     });
   }
+  alert('done');
 }
 
 </script>
