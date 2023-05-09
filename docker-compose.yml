@@ -68,7 +68,6 @@ services:
     depends_on:
       - cache
       - database
-      - extension-builder
     environment:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
