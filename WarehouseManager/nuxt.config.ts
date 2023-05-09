@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   ssr: true,
   routeRules: {
     '*/checkout': {ssr: false},
+    '*/hp2box': {ssr: false},
   },
   modules: [
     '@nuxt/devtools',
@@ -10,7 +11,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
   directus: {
-    url: 'http://cms.silentparty-hannover.de/',
+    url: 'https://cms.silentparty-hannover.de/',
   },
   pinia: {
     autoImports: [
