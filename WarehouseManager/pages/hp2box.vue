@@ -26,10 +26,11 @@ const getBoxes = async() => {
 const boxes = await getBoxes();
 
 const blink = ref(false);
-
 const mode = ref('add'); // null, add, remove
 
 const codes = ref([]);
+
+const cams = ref([]);
 
 const qrHeadphones = computed(() => [ ... new Set(codes.value.filter(item => /^\d+$/.test(item)))]);
 const qrBox = computed(() => codes.value.find(item => item.startsWith('K')) || 'keine Box gescannt');
@@ -47,6 +48,15 @@ if (process.client) {
     }
   });
   qrScanner.start();
+  QrScanner.listCameras(true).then(devices => {
+    cams.value = devices;
+    console.log(devices);
+    qrScanner.setCamera(devices[0].id, true).then(() => {
+      console.log('set camera complete');
+    }).catch(err => {
+      console.log(err);
+    });
+  })
 }
 
 function bind() {
@@ -84,6 +94,7 @@ function bind() {
     <v-card class="card">
       <v-card-title>HP-Boxes bindings</v-card-title>
       <v-card-text>
+        {{ cams }}
         <h3>Box: {{ qrBox }}</h3>
         <h3>Headphones: {{ qrHeadphones.sort().join(', ') }}</h3>
       </v-card-text>
