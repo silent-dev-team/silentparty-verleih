@@ -21,6 +21,12 @@ services:
       - TG_GROUP=${TG_GROUP}
       - TOKEN_SERVICE=${TOKEN_SERVICE}
 
+  libreoffice:
+    build: ./libreoffice
+    restart: always
+    ports: 
+      - "${PORTBASE}89:5000"
+
   webapp:
     image: webapp:0.0.1
     build: ./WarehouseManager
