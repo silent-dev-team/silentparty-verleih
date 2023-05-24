@@ -18,10 +18,10 @@ async def docs_redirect():
 
 @app.post("/convert-to", response_class=FileResponse)
 async def create_upload_file(file: UploadFile,bg_tasks: BackgroundTasks,format:formats = 'pdf'): 
-  """Converts a file to a specified format
+  """Converts a file to a specified format \n
 
   Args:
-      file (document): Document for conversion
+      file (document): Document for conversion |
       format (string, optional): target format. Defaults to 'pdf'.
 
   Returns:
