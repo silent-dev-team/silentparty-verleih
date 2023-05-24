@@ -1,9 +1,8 @@
 FROM fedora:38
 RUN dnf update -y
 RUN dnf install -y libreoffice-headless python3-pip
+RUN chmod 777 /tmp
 WORKDIR /api
-RUN mkdir /temp
-RUN mkdir /temp/pdf
 COPY . /api
 RUN pip install pipenv
 RUN pipenv install

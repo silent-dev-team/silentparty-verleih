@@ -5,7 +5,7 @@ from starlette.background import BackgroundTasks
 import subprocess, os
 from typing import Literal
 
-FOLDER = "./temp/"
+FOLDER = "/tmp/"
 formats = Literal['pdf','docx','doc','odt','ott','html','epub','xlsx','xls','ods','csv']
 
 logger = logging.getLogger(__name__)
@@ -35,12 +35,14 @@ async def create_upload_file(file: UploadFile,bg_tasks: BackgroundTasks,format:f
   source_path = f'{FOLDER}{name}.{ex}'
   target_path = f'{FOLDER}{name}.{format}'
 
+  print('INFO:\t',f' converting {source_path} to {target_path}')
+
   with open(source_path, "wb") as buffer:
     buffer.write(file.file.read())
 
-  proc = subprocess.run(["libreoffice","--headless","--convert-to",format,source_path,"--outdir",FOLDER],capture_output=True)
-  logger.info(proc.stdout)
-  logger.error(proc.stderr)
+  proc = subprocess.run(["libreoffice","--headless","--convert-to", format, source_path,"--outdir", FOLDER],capture_output=True)
+  print('INFO:\t',' libreoffice - ',proc.stdout.decode())
+  print('ERROR:\t',' libreoffice - ',proc.stderr.decode())
   
   bg_tasks.add_task(os.remove, source_path)
   bg_tasks.add_task(os.remove, target_path)
