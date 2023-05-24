@@ -14,7 +14,7 @@ app = FastAPI()
 async def root():
   return {"message": "Hello World"}
 
-@app.post("/uploadfile", response_class=FileResponse)
+@app.post("/convert-to-pdf", response_class=FileResponse)
 async def create_upload_file(file: UploadFile, bg_tasks: BackgroundTasks): 
   try:
     name, ex = file.filename.split('.')
