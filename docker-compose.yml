@@ -22,6 +22,7 @@ services:
       - TOKEN_SERVICE=${TOKEN_SERVICE}
 
   libreoffice:
+    image: libreoffice-headless:1.0
     build: ./libreoffice
     restart: always
     ports: 
