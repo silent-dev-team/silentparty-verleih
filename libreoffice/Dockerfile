@@ -1,6 +1,6 @@
 FROM fedora:38
 RUN dnf update -y
-RUN dnf install -y libreoffice-headless python3-pip
+RUN dnf install -y libreoffice python3-pip
 RUN chmod 777 /tmp
 WORKDIR /api
 COPY . /api
