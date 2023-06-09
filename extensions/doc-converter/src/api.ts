@@ -26,7 +26,7 @@ export default defineOperationApi<Options>({
 		sourceDoc
 
 		const files = new FilesService({schema: await getSchema(),accountability: {admin: true, role: null, permissions: []}});
-
+    const filename = files.filename;  //TODO: check
 		fetch(url,{
 			method: 'POST',
 			//...
