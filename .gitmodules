@@ -1,0 +1,3 @@
+[submodule "libreoffice"]
+	path = libreoffice
+	url = https://github.com/silent-dev-team/libreoffice
