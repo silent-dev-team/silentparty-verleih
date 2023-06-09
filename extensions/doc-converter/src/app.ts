@@ -5,14 +5,14 @@ export default defineOperationApp({
 	name: 'DocumentConverter',
 	icon: 'box',
 	description: 'This is a client for the LibreOffice document converter API.',
-	overview: ({ url, id, folder }) => [
+	overview: ({ url, fileId, folder }) => [
 		{
 			label: 'url',
 			text: url,
 		},
 		{
-			label: 'id',
-			text: id,
+			label: 'fileId',
+			text: fileId,
 		},
 		{
 			label: 'folder',
@@ -30,7 +30,7 @@ export default defineOperationApp({
 			},
 		},
 		{
-			field: 'id',
+			field: 'fileId',
 			name: 'UUID of original document',
 			type: 'string',
 			meta: {

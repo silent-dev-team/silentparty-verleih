@@ -3,7 +3,7 @@ import { Stream } from 'stream';
 
 type Options = {
 	url: string;
-	id: string;
+	fileId: string;
 	folder: string;
 };
 
@@ -19,18 +19,29 @@ async function stream2buffer(stream: Stream): Promise<Buffer> {
 
 export default defineOperationApi<Options>({
 	id: 'doc-converter',
-	handler: async ({ url, id, folder }, { services, getSchema }) => {
+	handler: async ({ url, fileId, folder }, { services, getSchema }) => {
 		const { AssetsService, FilesService } = services;
 		const assets = new AssetsService({accountability: {admin: true, role: null, permissions: []}});
-		const sourceDoc = await assets.getAsset(id,{})
-		sourceDoc
+		console.log(fileId);
+		const sourceDoc = await assets.getAsset(fileId,{});
+		const stream = sourceDoc.stream;
+		console.log(stream);
+		return {msg: 'ok'};
+		const buff = await stream2buffer(sourceDoc.stream);
+		const blob = new Blob([buff]);
+		var data = new FormData()
+		data.append('file', blob)
+		return {blob: blob};
 
-		const files = new FilesService({schema: await getSchema(),accountability: {admin: true, role: null, permissions: []}});
-    const filename = files.filename;  //TODO: check
+		//const files = new FilesService({schema: await getSchema(),accountability: {admin: true, role: null, permissions: []}});
+    //const filename = files.filename;  //TODO: check
+
 		fetch(url,{
 			method: 'POST',
-			//...
+			body: data
 		})
+
+		return {msg: 'ok'};
 
 		const primKey = await files.uploadOne(
 			//STREAM,
