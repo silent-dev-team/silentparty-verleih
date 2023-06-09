@@ -35,8 +35,8 @@ export default defineOperationApi<Options>({
 		const primKey = await files.uploadOne(
 			//STREAM,
 			{
-			title: //FILENAME,
-			filename_download : //FILENAME,
+			title: filename,
+			filename_download : filename,
 			storage: "local", 
 			folder: folder,
 			type: "application/pdf"
