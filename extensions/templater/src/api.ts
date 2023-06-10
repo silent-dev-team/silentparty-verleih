@@ -3,7 +3,10 @@ import { Stream } from 'stream';
 import { TemplateBuilder } from './templateParser';
 
 type Options = {
-	text: string;
+	data: any;
+	filename: string;
+	templateId: string;
+	folderId: string;
 };
 
 async function stream2buffer(stream: Stream): Promise<Buffer> {
