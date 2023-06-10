@@ -22,14 +22,14 @@ services:
       - TOKEN_SERVICE=${TOKEN_SERVICE}
 
   libreoffice:
-    image: libreoffice-headless:1.0
+    image: libreoffice-headless:rc-_-build
     build: ./libreoffice
     restart: always
     ports: 
       - "${PORTBASE}89:5000"
 
   webapp:
-    image: webapp:0.0.1
+    image: webapp:rc-_-build
     build: ./WarehouseManager
     ports:
       - '${PORTBASE}81:3000'
@@ -114,7 +114,7 @@ services:
   
   backup:
     restart: always
-    image: backup
+    image: backup:rc-_-build
     build: ./backup
     volumes:
       - backups:/backups

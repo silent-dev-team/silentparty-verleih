@@ -8,6 +8,21 @@ on:
 
 name: deploy
 jobs:
+  change_version:
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set demo tag
+        uses: jaywcjlove/github-action-modify-file-content@main
+        with:
+          token: ${{ secrets.TOKEN }}
+          path: docker-compose.yml
+          body: "{{date:MM.DD.HH.mm}}"
+          openDelimiter: rc-
+        closeDelimiter: -build
+  
   build:
     runs-on: ubuntu-latest
     steps:
