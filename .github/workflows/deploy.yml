@@ -9,7 +9,6 @@ on:
 name: deploy
 jobs:
   change_version:
-    if: ${{ github.event.pull_request.merged }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
