@@ -4,10 +4,11 @@ import fetch from 'node-fetch';
 import { RequestInit } from 'node-fetch';
 
 type Options = {
-	url: string;
 	fileId: string;
 	folder: string;
 };
+
+const URL = 'https://converter.silentparty-hannover.de/convert-to';
 
 function streamToBlob (stream:Stream, mimeType:string|null = null): Promise<Blob> {
   if (mimeType != null && typeof mimeType !== 'string') {
@@ -27,19 +28,9 @@ function streamToBlob (stream:Stream, mimeType:string|null = null): Promise<Blob
   })
 }
 
-async function stream2buffer(stream: Stream): Promise<Buffer> {
-
-	return new Promise < Buffer > ((resolve, reject) => {
-			const _buf = Array < any > ();
-			stream.on("data", chunk => _buf.push(chunk));
-			stream.on("end", () => resolve(Buffer.concat(_buf)));
-			stream.on("error", err => reject(`error converting stream - ${err}`));
-	});
-} 
-
 export default defineOperationApi<Options>({
 	id: 'doc-converter',
-	handler: async ({ url, fileId, folder }, { services, getSchema }) => {
+	handler: async ({ fileId, folder }, { services, getSchema }) => {
 		const { AssetsService, FilesService } = services;
 		const assets = new AssetsService({accountability: {admin: true, role: null, permissions: []}});
 		
@@ -61,8 +52,8 @@ export default defineOperationApi<Options>({
 			body: form
 		};
 
-		console.log('request to ', url);
-		const resp = await fetch(url, requestOptions)
+		console.log('request to ', URL);
+		const resp = await fetch(URL, requestOptions)
 		const respStream = (await resp.blob()).stream();
 
 		const files = new FilesService({schema: await getSchema(),accountability: {admin: true, role: null, permissions: []}});
