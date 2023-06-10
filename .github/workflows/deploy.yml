@@ -21,7 +21,7 @@ jobs:
           path: docker-compose.yml
           body: "{{date:MM.DD.HH.mm}}"
           openDelimiter: rc-
-        closeDelimiter: -build
+          closeDelimiter: -build
   
   build:
     runs-on: ubuntu-latest
