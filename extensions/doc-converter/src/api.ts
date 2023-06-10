@@ -49,21 +49,21 @@ export default defineOperationApi<Options>({
 		const new_filename = old_filename.replace(/\.[^/.]+$/, "") + '.pdf';
 		const stream:Stream = sourceDoc.stream;
 		
+		console.log(`converting ${old_filename} to ${new_filename}`);
+		
 		const blob = await streamToBlob(stream, `application/${old_ext}`);
 		
 		let form = new FormData();
 		form.set('file', blob, old_filename);
 
-		console.log('blob.size',blob.size);
-
 		const requestOptions: RequestInit = {
 			method: "POST",
 			body: form
 		};
+
+		console.log('request to ', url);
 		const resp = await fetch(url, requestOptions)
 		const respStream = (await resp.blob()).stream();
-
-		console.log('resp', respStream);
 
 		const files = new FilesService({schema: await getSchema(),accountability: {admin: true, role: null, permissions: []}});
 		const primKey = await files.uploadOne(
