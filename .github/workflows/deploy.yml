@@ -38,7 +38,14 @@ jobs:
           METHOD: sftp
           PORT: ${{ secrets.PORT }}
 
-      - name: Pull WebHook for portainer restart
+      - name: Pull Portainer Hook
+        uses: muinmomin/webhook-action@v1.0.0
+        continue-on-error: true
+        with:
+          url: ${{ secrets.PORTAINER_PULL_HOOK }}
+      
+      - name: Repull Portainer Hook
+        if: ${{ failure() }}
         uses: muinmomin/webhook-action@v1.0.0
         with:
           url: ${{ secrets.PORTAINER_PULL_HOOK }}
