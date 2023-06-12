@@ -26,18 +26,29 @@ const getBoxes = async() => {
 const boxes = await getBoxes();
 
 const blink = ref(false);
+const flip = ref(false);
 const mode = ref('add'); // null, add, remove
+
+const dialog = ref(false);
 
 const codes = ref([]);
 
 const cams = ref([]);
 
+const qrScanner = ref(null);
+
 const qrHeadphones = computed(() => [ ... new Set(codes.value.filter(item => /^\d+$/.test(item)))]);
 const qrBox = computed(() => codes.value.find(item => item.startsWith('K')) || 'keine Box gescannt');
 
 if (process.client) {
+
+  QrScanner.listCameras(true).then(devices => {
+    cams.value = devices;
+    console.log(devices);
+  });
+
   const vid = window.document.getElementById('qr-video');
-  const qrScanner = new QrScanner(vid, result => {
+  qrScanner.value = new QrScanner(vid, result => {
     if ( mode.value == 'add' ){
       if (codes.value.includes(result)) return;
       codes.value.unshift(result);
@@ -47,16 +58,8 @@ if (process.client) {
       codes.value = codes.value.filter(item => item != result);
     }
   });
-  qrScanner.start();
-  QrScanner.listCameras(true).then(devices => {
-    cams.value = devices;
-    console.log(devices);
-    qrScanner.setCamera(devices[0].id, true).then(() => {
-      console.log('set camera complete');
-    }).catch(err => {
-      console.log(err);
-    });
-  })
+
+  qrScanner.value.start();
 }
 
 function bind() {
@@ -76,10 +79,16 @@ function bind() {
   alert('done');
 }
 
+function log(content){
+  console.log(content);
+}
+
 </script>
 
 <template>
-    <video id="qr-video" :class="`video ${blink?'blink':''}`"></video>
+    <div :class="`frame ${flip?'flip':''}`">
+      <video id="qr-video" :class="`video ${blink?'blink':''}`"></video>
+    </div>
     <div class="mode">
       <v-btn v-if="mode != 'remove' && mode != 'null'" class="mx-2" icon="mdi-plus-circle" variant="plain" color="success" @click="mode = 'remove'"></v-btn>
       <v-btn v-if="mode != 'add' && mode != 'null'" class="mx-2" icon="mdi-minus-circle" variant="plain" color="error" @click="mode = 'add'"></v-btn>
@@ -91,25 +100,57 @@ function bind() {
         </v-card>
       </div>
     </div>
+    
     <v-card class="card">
       <v-card-title>HP-Boxes bindings</v-card-title>
       <v-card-text>
-        {{ cams }}
         <h3>Box: {{ qrBox }}</h3>
         <h3>Headphones: {{ qrHeadphones.sort().join(', ') }}</h3>
       </v-card-text>
       <v-card-actions id="actions">
         <v-btn color="primary" :disabled="!(qrBox.startsWith('K') && headphones.length != 0)" @click="bind()">bind</v-btn>
+        <v-btn color="primary" @click="dialog = true">Settings</v-btn>
       </v-card-actions>
     </v-card>
+    <v-dialog
+      v-model="dialog"
+      width="auto"
+    >
+      <v-card width="800px" max-width="90%">
+        <v-card-title>Settings</v-card-title>
+        <v-select
+          class="ma-5"
+          :items="cams.map(cam => cam.label)"
+          @update:model-value="qrScanner.setCamera(cams.find(el => el.label == $event).id)"
+          label="Select a camera"
+          variant="outlined"
+        />
+        <v-card-actions>
+          <v-btn @click="flip = !flip">flip</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>
 
 <style scoped>
+
+frame {
+  height: 100vh;
+  position: fixed;
+}
 .video {
   height: 100vh;
   position: fixed;
   transition: all 0.15s ease-in-out; 
   filter:brightness(1);
+}
+
+.flip {
+  -moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
 }
 
 .blink {
