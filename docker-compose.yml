@@ -112,15 +112,15 @@ services:
       # (see https://docs.directus.io/reference/environment-variables/#general)
       PUBLIC_URL: 'https://${PUBLIC_URL}'
   
-  backup:
-    restart: always
-    image: backup:rc-_-build
-    build: ./backup
-    volumes:
-      - backups:/backups
+  pg_remote:
+    container_name: pg_remote
+    image: pg_remote:0.1
     networks:
       - directus
+    ports:
+      - '${PORTBASE}32:3000'
     environment:
+      KEY: '${KEY}'
       DB_HOST: 'database'
       DB_PORT: '5432'
       DB_DATABASE: 'directus'
