@@ -114,7 +114,7 @@ services:
   
   pg_remote:
     container_name: pg_remote
-    image: pg_remote:0.1
+    image: pg_remote:0.1 #! ACHTUNG: wird nicht automatisch gebuildet
     networks:
       - directus
     ports:
