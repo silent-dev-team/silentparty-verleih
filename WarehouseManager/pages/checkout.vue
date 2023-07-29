@@ -1,63 +1,67 @@
-<script setup>
+<script setup lang="ts">
 import QrScanner from 'qr-scanner';
+import { Offer, Order, Box } from '../types/directus';
+import { Modi } from '../types/util';
 const { getItems, getItemById } = useDirectusItems();
 
-const mode = ref('add'); // null, add, remove
+// PROPS
+const mode = ref<Modi>('add'); // null, add, remove
+const boxes = ref<any>([]);
 
-const items = ref([]);
+const offer = ref<Offer>();
+const selectedOrder = ref<Order>();
 
-const getOrders = async () => {
-  return await getItems({
-    collection: 'order',
-    params: {
-      filter: {
-        status: {
-          _eq: "offer_accepted"
-        }
+// CONSTRUCTOR
+const orders = await getItems<Order>({
+  collection: 'order',
+  params: {
+    filter: {
+      status: {
+        _eq: "offer_accepted"
       }
     }
-  });
-}
+  }
+});
 
-const getOffer = async (id) => {
-  return await getItemById({
+// METHODS
+function loadOffer(orderId:string):void {
+  getItemById<Offer>({
     collection: 'offer',
-    id: id
-  });
-}
-
-function loadOffer(orderId) {
-  getOffer(orders.find(order => order.id == orderId).offer).then(off => {
+    id: orders.find(order => order.id == orderId)!.offer
+  })
+  .then(off => {
     offer.value = off;
   })
 }
 
-const orders = await getOrders();
-const selectedOrder = ref(null);
-const offer = ref(null);
+async function countHeadphonesInBox(boxId:string):Promise<number> {
+  const box = await getItemById<Box>({
+    collection: 'boxes',
+    id: boxId
+  });
+  return box.headphones.length;
+}
 
+// MAIN
 if (process.client) {
   const vid = window.document.getElementById('qr-video');
   const qrScanner = new QrScanner(vid, result => {
     console.log(result);
-    items.value.unshift({ code: result });
+    boxes.value.unshift({ code: result });
   });
   qrScanner.start();
-
-
 }
-
 
 </script>
 
 <template>
     <video id="qr-video" class="video"></video>
     <div class="mode">
-      <v-btn v-if="mode != 'remove' && mode != 'null'" class="mx-2" icon="mdi-plus-circle" variant="plain" color="success" @click="mode = 'remove'"></v-btn>
-      <v-btn v-if="mode != 'add' && mode != 'null'" class="mx-2" icon="mdi-minus-circle" variant="plain" color="error" @click="mode = 'add'"></v-btn>
+      <v-btn v-if="mode != 'remove' && mode != null" class="mx-2" icon="mdi-plus-circle" variant="plain" color="success" @click="mode = 'remove'"></v-btn>
+      <v-btn v-if="mode != 'add' && mode != null" class="mx-2" icon="mdi-minus-circle" variant="plain" color="error" @click="mode = 'add'"></v-btn>
     </div>
     <div class="history">
-      <div v-for="item, i in items">
+      <div v-for="item, i in boxes">
         <v-card class="mx-auto my-1 text-center" :style="`background-color: rgba(255,255,255,${1 - i*0.2}); color: rgba(1,1,1,${1 - i*0.1});`">
           <p>{{ item.code }}</p>
         </v-card>

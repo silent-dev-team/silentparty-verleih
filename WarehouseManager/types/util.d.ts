@@ -1,0 +1,1 @@
+export type Modi = 'add' | 'remove' | null;
