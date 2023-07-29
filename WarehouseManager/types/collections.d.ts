@@ -19,7 +19,7 @@ export type Order = {
   rechnung:              string;
   offer_doc:             null;
   r_num:                 string;
-  mail:                  null;
+  mail:                  string;
   requested_headphones:  number;
   requested_transmitter: number;
 }

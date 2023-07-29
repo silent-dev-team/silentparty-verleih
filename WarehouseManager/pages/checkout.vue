@@ -9,7 +9,7 @@ const mode = ref<Modi>('add'); // null, add, remove
 const boxes = ref<any>([]);
 
 const offer = ref<Offer>();
-const selectedOrder = ref<Order>();
+const selectedOrder = ref<string>();
 
 // CONSTRUCTOR
 const orders = await getItems<Order>({
