@@ -26,37 +26,14 @@ let mode = $ref<Modi>('add'); // null, add, remove
 
 let dialog = $ref(false);
 
-let codes = $ref<string[]>([]);
+let results = $ref<string[]>([]);
 
 let cams = $ref<QrScanner.Camera[]>([]);
 
 let qrScanner = $ref<QrScanner>();
 
-const qrHeadphones = $computed(() => [ ... new Set(codes.filter(item => /^\d+$/.test(item)))]);
-const qrBox = $computed(() => codes.find(item => item.startsWith('K')) || 'keine Box gescannt');
-
-if (process.client) {
-
-  QrScanner.listCameras(true).then(devices => {
-    cams = devices;
-    console.log(devices);
-  });
-
-  const vid = window.document.getElementById('qr-video')!;
-  qrScanner = new QrScanner(vid, result => {
-    if (result instanceof Error) return;
-    if ( mode == 'add' ){
-      if (codes.includes(result)) return;
-      codes.unshift(result);
-      blink = true;
-      setTimeout(() => blink = false, 300);
-    } else if ( mode == 'remove' ) {
-      codes = codes.filter(item => item != result);
-    }
-  });
-
-  qrScanner.start();
-}
+const qrHeadphones = $computed(() => [ ... new Set(results.filter(item => /^\d+$/.test(item)))]);
+const qrBox = $computed(() => results.find(item => item.startsWith('K')) || 'keine Box gescannt');
 
 function bind() {
   const boxId = boxes.find(box => box.qr == qrBox)!.id;
@@ -82,21 +59,7 @@ function log(content:any){
 </script>
 
 <template>
-    <div :class="`frame ${flip?'flip':''}`">
-      <video id="qr-video" :class="`video ${blink?'blink':''}`"></video>
-    </div>
-    <div class="mode">
-      <v-btn v-if="mode != 'remove' && mode != null" class="mx-2" icon="mdi-plus-circle" variant="plain" color="success" @click="mode = 'remove'"></v-btn>
-      <v-btn v-if="mode != 'add' && mode != null" class="mx-2" icon="mdi-minus-circle" variant="plain" color="error" @click="mode = 'add'"></v-btn>
-    </div>
-    <div class="history">
-      <div v-for="item, i in codes">
-        <v-card :class="`mx-auto my-1 text-center toast ${i==0?'big':'0'}`" :style="`background-color: rgba(255,255,255,${1 - i*0.2}); color: rgba(1,1,1,${1 - i*0.15});`">
-          <p>{{ item }}</p>
-        </v-card>
-      </div>
-    </div>
-    
+    <scanner @results="r => results = r"></scanner>
     <v-card class="card">
       <v-card-title>HP-Boxes bindings</v-card-title>
       <v-card-text>
