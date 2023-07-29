@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     'nuxt-directus',
     '@pinia/nuxt',
+    '@vue-macros/nuxt'
   ],
   directus: {
     url: 'https://cms.silentparty-hannover.de/',
