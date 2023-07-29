@@ -28,7 +28,7 @@ let dialog = $ref(false);
 
 let codes = $ref<string[]>([]);
 
-const cams = ref<QrScanner.Camera[]>([]);
+let cams = $ref<QrScanner.Camera[]>([]);
 
 let qrScanner = $ref<QrScanner>();
 
@@ -38,7 +38,7 @@ const qrBox = $computed(() => codes.find(item => item.startsWith('K')) || 'keine
 if (process.client) {
 
   QrScanner.listCameras(true).then(devices => {
-    cams.value = devices;
+    cams = devices;
     console.log(devices);
   });
 

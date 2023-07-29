@@ -48,7 +48,7 @@ if (process.client) {
   const qrScanner = new QrScanner(vid, result => {
     if (result instanceof Error) return;
     console.log(result);
-    boxes.value.unshift({ code: result });
+    boxes.unshift({ code: result });
   });
   qrScanner.start();
 }
