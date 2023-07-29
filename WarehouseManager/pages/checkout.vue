@@ -44,8 +44,9 @@ async function countHeadphonesInBox(boxId:string):Promise<number> {
 
 // MAIN
 if (process.client) {
-  const vid = window.document.getElementById('qr-video');
+  const vid = window.document.getElementById('qr-video')!;
   const qrScanner = new QrScanner(vid, result => {
+    if (result instanceof Error) return;
     console.log(result);
     boxes.value.unshift({ code: result });
   });

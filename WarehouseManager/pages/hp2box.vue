@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { setMapStoreSuffix } from 'pinia';
 import QrScanner from 'qr-scanner';
 import { Headphone, Box } from '../types/collections';
 import { Modi } from '../types/util';
+import { type } from '../.nuxt/types/imports';
 const { getItems, updateItem } = useDirectusItems();
 
 const headphones = await getItems<Headphone>({
@@ -43,8 +43,9 @@ if (process.client) {
     console.log(devices);
   });
 
-  const vid = window.document.getElementById('qr-video');
+  const vid = window.document.getElementById('qr-video')!;
   qrScanner.value = new QrScanner(vid, result => {
+    if (result instanceof Error) return;
     if ( mode.value == 'add' ){
       if (codes.value.includes(result)) return;
       codes.value.unshift(result);
