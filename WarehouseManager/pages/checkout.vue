@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import QrScanner from 'qr-scanner';
-import { Offer, Order, Box } from '../types/directus';
+import { Offer, Order, Box } from '../types/collections';
 import { Modi } from '../types/util';
 const { getItems, getItemById } = useDirectusItems();
 
@@ -129,3 +129,4 @@ if (process.client) {
   top:95%;
 }
 </style>
+../types/collections

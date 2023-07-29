@@ -1,41 +1,37 @@
-<script setup>
+<script setup lang="ts">
 import { setMapStoreSuffix } from 'pinia';
 import QrScanner from 'qr-scanner';
+import { Headphone, Box } from '../types/collections';
+import { Modi } from '../types/util';
 const { getItems, updateItem } = useDirectusItems();
 
-const getHeadphones = async() => {
-  return await getItems({
-    collection: 'headphones',
-    params: {
-      fields: 'id,qr,box',
-      limit: -1
-    }
-  });
-}
-const headphones = await getHeadphones();
+const headphones = await getItems<Headphone>({
+  collection: 'headphones',
+  params: {
+    fields: ['id','qr','box'],
+    limit: -1
+  }
+});
 
-const getBoxes = async() => {
-  return await getItems({
-    collection: 'boxes',
-    params: {
-      fields: 'id,qr,box',
-      limit: -1
-    }
-  });
-}
-const boxes = await getBoxes();
+const boxes = await getItems<Box>({
+  collection: 'boxes',
+  params: {
+    fields: ['id','qr','box'],
+    limit: -1
+  }
+});
 
 const blink = ref(false);
 const flip = ref(false);
-const mode = ref('add'); // null, add, remove
+const mode = ref<Modi>('add'); // null, add, remove
 
 const dialog = ref(false);
 
-const codes = ref([]);
+const codes = ref<string[]>([]);
 
-const cams = ref([]);
+const cams = ref<QrScanner.Camera[]>([]);
 
-const qrScanner = ref(null);
+const qrScanner = ref<QrScanner>();
 
 const qrHeadphones = computed(() => [ ... new Set(codes.value.filter(item => /^\d+$/.test(item)))]);
 const qrBox = computed(() => codes.value.find(item => item.startsWith('K')) || 'keine Box gescannt');
@@ -63,10 +59,10 @@ if (process.client) {
 }
 
 function bind() {
-  const boxId = boxes.find(box => box.qr == qrBox.value).id;
+  const boxId = boxes.find(box => box.qr == qrBox.value)!.id;
   for ( let i = 0; i < qrHeadphones.value.length; i++ ) {
     const code = qrHeadphones.value[i];
-    const hpId = headphones.find(hp => hp.qr == code).id;
+    const hpId = headphones.find(hp => hp.qr == code)!.id;
     console.log(hpId,'->', boxId);
     updateItem({
       collection: 'headphones',
@@ -79,7 +75,7 @@ function bind() {
   alert('done');
 }
 
-function log(content){
+function log(content:any){
   console.log(content);
 }
 
@@ -90,8 +86,8 @@ function log(content){
       <video id="qr-video" :class="`video ${blink?'blink':''}`"></video>
     </div>
     <div class="mode">
-      <v-btn v-if="mode != 'remove' && mode != 'null'" class="mx-2" icon="mdi-plus-circle" variant="plain" color="success" @click="mode = 'remove'"></v-btn>
-      <v-btn v-if="mode != 'add' && mode != 'null'" class="mx-2" icon="mdi-minus-circle" variant="plain" color="error" @click="mode = 'add'"></v-btn>
+      <v-btn v-if="mode != 'remove' && mode != null" class="mx-2" icon="mdi-plus-circle" variant="plain" color="success" @click="mode = 'remove'"></v-btn>
+      <v-btn v-if="mode != 'add' && mode != null" class="mx-2" icon="mdi-minus-circle" variant="plain" color="error" @click="mode = 'add'"></v-btn>
     </div>
     <div class="history">
       <div v-for="item, i in codes">
@@ -121,7 +117,7 @@ function log(content){
         <v-select
           class="ma-5"
           :items="cams.map(cam => cam.label)"
-          @update:model-value="qrScanner.setCamera(cams.find(el => el.label == $event).id)"
+          @update:model-value="qrScanner!.setCamera(cams.find(el => el.label == $event)!.id)"
           label="Select a camera"
           variant="outlined"
         />

@@ -61,3 +61,13 @@ export type Headphone = {
   qr:           string;
   box:          string;
 }
+
+export type Transmitter = {
+  id:           string;
+  status:       'ok'|'defect'|'lost';
+  user_created: string;
+  date_created: Date;
+  user_updated: Date;
+  date_updated: Date;
+  qr:           string;
+}
