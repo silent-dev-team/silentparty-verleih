@@ -2,7 +2,6 @@
 import QrScanner from 'qr-scanner';
 import { Headphone, Box } from '../types/collections';
 import { Modi } from '../types/util';
-import { type } from '../.nuxt/types/imports';
 const { getItems, updateItem } = useDirectusItems();
 
 const headphones = await getItems<Headphone>({
@@ -21,20 +20,20 @@ const boxes = await getItems<Box>({
   }
 });
 
-const blink = ref(false);
-const flip = ref(false);
-const mode = ref<Modi>('add'); // null, add, remove
+let blink = $ref(false);
+let flip = $ref(false);
+let mode = $ref<Modi>('add'); // null, add, remove
 
-const dialog = ref(false);
+let dialog = $ref(false);
 
-const codes = ref<string[]>([]);
+let codes = $ref<string[]>([]);
 
 const cams = ref<QrScanner.Camera[]>([]);
 
-const qrScanner = ref<QrScanner>();
+let qrScanner = $ref<QrScanner>();
 
-const qrHeadphones = computed(() => [ ... new Set(codes.value.filter(item => /^\d+$/.test(item)))]);
-const qrBox = computed(() => codes.value.find(item => item.startsWith('K')) || 'keine Box gescannt');
+const qrHeadphones = $computed(() => [ ... new Set(codes.filter(item => /^\d+$/.test(item)))]);
+const qrBox = $computed(() => codes.find(item => item.startsWith('K')) || 'keine Box gescannt');
 
 if (process.client) {
 
@@ -44,25 +43,25 @@ if (process.client) {
   });
 
   const vid = window.document.getElementById('qr-video')!;
-  qrScanner.value = new QrScanner(vid, result => {
+  qrScanner = new QrScanner(vid, result => {
     if (result instanceof Error) return;
-    if ( mode.value == 'add' ){
-      if (codes.value.includes(result)) return;
-      codes.value.unshift(result);
-      blink.value = true;
-      setTimeout(() => blink.value = false, 300);
-    } else if ( mode.value == 'remove' ) {
-      codes.value = codes.value.filter(item => item != result);
+    if ( mode == 'add' ){
+      if (codes.includes(result)) return;
+      codes.unshift(result);
+      blink = true;
+      setTimeout(() => blink = false, 300);
+    } else if ( mode == 'remove' ) {
+      codes = codes.filter(item => item != result);
     }
   });
 
-  qrScanner.value.start();
+  qrScanner.start();
 }
 
 function bind() {
-  const boxId = boxes.find(box => box.qr == qrBox.value)!.id;
-  for ( let i = 0; i < qrHeadphones.value.length; i++ ) {
-    const code = qrHeadphones.value[i];
+  const boxId = boxes.find(box => box.qr == qrBox)!.id;
+  for ( let i = 0; i < qrHeadphones.length; i++ ) {
+    const code = qrHeadphones[i];
     const hpId = headphones.find(hp => hp.qr == code)!.id;
     console.log(hpId,'->', boxId);
     updateItem({

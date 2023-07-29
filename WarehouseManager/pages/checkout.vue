@@ -5,11 +5,11 @@ import { Modi } from '../types/util';
 const { getItems, getItemById } = useDirectusItems();
 
 // PROPS
-const mode = ref<Modi>('add'); // null, add, remove
-const boxes = ref<any>([]);
+let mode = $ref<Modi>('add'); // null, add, remove
+let boxes = $ref<any>([]);
 
-const offer = ref<Offer>();
-const selectedOrder = ref<string>();
+let offer = $ref<Offer>();
+let selectedOrder = $ref<string>();
 
 // CONSTRUCTOR
 const orders = await getItems<Order>({
@@ -30,7 +30,7 @@ function loadOffer(orderId:string):void {
     id: orders.find(order => order.id == orderId)!.offer
   })
   .then(off => {
-    offer.value = off;
+    offer = off;
   })
 }
 

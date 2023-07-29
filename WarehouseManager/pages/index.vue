@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const router = useRouter()
-const username = $ref('')
-const password = $ref('')
+let username = $ref<string>('')
+let password = $ref<string>('')
 
-const loggedIn = $ref(false)
+let loggedIn = $ref<boolean>(false)
 
 const links = [
   {
