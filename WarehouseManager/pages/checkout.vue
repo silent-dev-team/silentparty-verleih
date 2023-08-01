@@ -52,7 +52,6 @@ if (process.client) {
   });
   qrScanner.start();
 }
-
 </script>
 
 <template>

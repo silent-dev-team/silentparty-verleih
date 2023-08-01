@@ -20,9 +20,7 @@ const boxes = await getItems<Box>({
   }
 });
 
-let blink = $ref(false);
-let flip = $ref(false);
-let mode = $ref<Modi>('add'); // null, add, remove
+let showSettings = $ref(false);
 
 let dialog = $ref(false);
 
@@ -59,36 +57,19 @@ function log(content:any){
 </script>
 
 <template>
-    <scanner @results="r => results = r"></scanner>
-    <v-card class="card">
-      <v-card-title>HP-Boxes bindings</v-card-title>
-      <v-card-text>
-        <h3>Box: {{ qrBox }}</h3>
-        <h3>Headphones: {{ qrHeadphones.sort().join(', ') }}</h3>
-      </v-card-text>
-      <v-card-actions id="actions">
-        <v-btn color="primary" :disabled="!(qrBox.startsWith('K') && headphones.length != 0)" @click="bind()">bind</v-btn>
-        <v-btn color="primary" @click="dialog = true">Settings</v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-dialog
-      v-model="dialog"
-      width="auto"
-    >
-      <v-card width="800px" max-width="90%">
-        <v-card-title>Settings</v-card-title>
-        <v-select
-          class="ma-5"
-          :items="cams.map(cam => cam.label)"
-          @update:model-value="qrScanner!.setCamera(cams.find(el => el.label == $event)!.id)"
-          label="Select a camera"
-          variant="outlined"
-        />
-        <v-card-actions>
-          <v-btn @click="flip = !flip">flip</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+  <scanner :show-settings="showSettings" @results="r => results = r"></scanner>
+  <v-card class="card">
+    <v-card-title>HP-Boxes bindings</v-card-title>
+    <v-card-text>
+      <h3>Box: {{ qrBox }}</h3>
+      <h3>Headphones: {{ qrHeadphones.sort().join(', ') }}</h3>
+    </v-card-text>
+    <v-card-actions id="actions">
+      <v-btn color="primary" :disabled="!(qrBox.startsWith('K') && headphones.length != 0)" @click="bind()">bind</v-btn>
+      <v-btn color="primary" @click="showSettings = true">Settings</v-btn>
+    </v-card-actions>
+    {{ showSettings }}
+  </v-card>
 </template>
 
 <style scoped>

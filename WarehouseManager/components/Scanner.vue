@@ -2,18 +2,15 @@
 import QrScanner from 'qr-scanner';
 import { Modi } from '../types/util';
 
-/*
-const props = defineProps({
-  mode: {
-    type: String as PropType<Modi>,
-    default: 'add'
-  }
-});
-*/
+
+let props = defineProps<{
+  showSettings?: boolean
+}>()
 
 const emit = defineEmits<{
-  (e:'onScan', value: string): void,
-  (e:'results', value: string[]): void
+  onScan: [value: string]
+  results: [value: string[]]
+  'update:showSettings': [value: boolean]
 }>()
 
 let mode = $ref<Modi>('add'); // null, add, remove
@@ -52,6 +49,7 @@ if (process.client) {
 </script>
 
 <template>
+  {{ props }}
   <div :class="`frame ${flip?'flip':''}`">
     <video id="qr-video" :class="`video ${blink?'blink':''}`"></video>
   </div>
@@ -66,6 +64,24 @@ if (process.client) {
       </v-card>
     </div>
   </div>
+  <v-dialog
+      v-model="props.showSettings"
+      width="auto"
+    >
+      <v-card width="800px" max-width="90%">
+        <v-card-title>Settings</v-card-title>
+        <v-select
+          class="ma-5"
+          :items="cams.map(cam => cam.label)"
+          @update:model-value="qrScanner!.setCamera(cams.find(el => el.label == $event)!.id)"
+          label="Select a camera"
+          variant="outlined"
+        />
+        <v-card-actions>
+          <v-btn @click="flip = !flip">flip</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>
 
 <style scoped>
