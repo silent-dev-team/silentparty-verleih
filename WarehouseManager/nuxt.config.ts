@@ -1,16 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  devtools: { enabled: true },
   ssr: true,
   routeRules: {
-    '*/...': {ssr: false},
+    '*/checkout': {ssr: false},
+    '*/hp2box': {ssr: false},
   },
   modules: [
     '@nuxt/devtools',
     'nuxt-directus',
     '@pinia/nuxt',
+    '@vue-macros/nuxt'
   ],
   directus: {
-    url: 'http://cms.silentparty-hannover.de/',
+    url: 'https://cms.silentparty-hannover.de/',
   },
   pinia: {
     autoImports: [

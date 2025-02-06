@@ -1,4 +1,6 @@
 service/templates/.~lock.angebot.docx#
+*/node_modules
+*/node_modules/*
 *.lock*
 *lock.*
 *test.docx

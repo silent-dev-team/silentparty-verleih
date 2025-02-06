@@ -1,0 +1,6 @@
+[submodule "libreoffice"]
+	path = libreoffice
+	url = https://github.com/silent-dev-team/libreoffice
+[submodule "pg_remote"]
+	path = pg_remote
+	url = https://github.com/Piitschy/pg_remote

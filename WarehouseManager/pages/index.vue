@@ -1,33 +1,148 @@
-import { useCounterStore } from '../stores/sharedCounter';
 <script setup lang="ts">
-import { useCounterStore } from '../stores/sharedCounter';
+const router = useRouter()
+let username = $ref<string>('')
+let password = $ref<string>('')
 
-const sharedCounter = useCounterStore();
+let loggedIn = $ref<boolean>(false)
 
-const text = 'Hello World'
-const counter = ref<number>(0)
+const links = [
+  {
+    title: 'Link HP und Box',
+    img: 'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_960_720.jpg',
+    link: '/hp2box'
+  },
+  {
+    title: 'Kopfhörer Ausgabe',
+    img: 'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_960_720.jpg',
+    link: '/checkout'
+  },
+  {
+    title: 'Kopfhörer Rücknahme',
+    img: 'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_960_720.jpg',
+    link: '/checkin'
+  }
+]
 
-const reset = () => {
-  counter.value = 0
-}
 </script>
 
 <template>
-  <div>
-    <div class="text-center">
-      <h1>Index page</h1>
-      <p>{{ text }}</p>
-      <v-card class="mx-auto my-3 pa-5" width="300px">
-        <p>Counter: {{ counter }}</p>
-        <v-btn class="mx-2" @click="counter++">+1</v-btn>
-        <v-btn class="mx-2" @click="reset">Reset</v-btn>
-      </v-card>
-      <v-card v-for="i in [1,2]" :key="i" class="mx-auto my-3 pa-5" width="300px">
-        <p>SharedCounter{{ i }}: {{ sharedCounter.count }}</p>
-        <v-btn class="mx-2" @click="sharedCounter.increment()">Shared +1</v-btn>
-        <v-btn class="mx-2 my-1" @click="sharedCounter.reset()">Shared Reset</v-btn>
-      </v-card>
+  <div class="header">
+    <div class="textbox">
+      <h1>Verleih</h1>
+      <v-expand-transition>
+      <div class="login" v-if="!loggedIn">
+        <v-text-field
+          v-model="username"
+          label="username"
+          outlined
+          dense
+          hide-details
+          class="ma-5"
+        />
+        <v-text-field
+          v-model="password"
+          label="password"
+          type="password"
+          outlined
+          dense
+          hide-details
+          class="ma-5"
+        />
+        <v-btn 
+          outlined
+          dense
+          hide-details
+          class="center mx-5 mb-3"
+          @click="loggedIn = true"
+          >Einloggen
+        </v-btn>
+      </div>
+    </v-expand-transition>
     </div>
-    <NuxtWelcome />
+  </div>
+  <div>
+    <v-col>
+      <v-row>
+        <v-col v-for="link in links" :key="link.link" cols="12" md="6">
+          <v-card class="linkcard mx-auto" max-width="500" @click="router.push(link.link)">
+            <v-img class="img" height="100px" cover :src="link.img">
+              <v-card-title class="title">{{ link.title }}</v-card-title>
+            </v-img>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-col>
   </div>
 </template>
+
+<style scoped>
+h1 {
+  font-size: 50px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+}
+.header{
+  background: rgb(2,0,36);
+  background: linear-gradient(156deg, rgba(2,0,36,1) 0%, rgba(63,81,181,1) 100%);
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.header .textbox{
+  position: relative;
+  top: 20%;
+  left: 5%;
+}
+
+.login{
+  width: 90%;
+}
+
+.btn {
+  color: rgba(63,81,181,1);
+  background-color: rgba(63,81,181,1);
+}
+
+.linkcard .title {
+  color: #f5f5f5;
+}
+
+.linkcard .img {
+  opacity: 0.8;
+  animation: fade-out 0.5s;
+}
+
+.linkcard .img:hover {
+  opacity: 1;
+  animation: fade-in 0.5s;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+</style>

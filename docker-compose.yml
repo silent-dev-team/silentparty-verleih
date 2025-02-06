@@ -21,13 +21,28 @@ services:
       - TG_GROUP=${TG_GROUP}
       - TOKEN_SERVICE=${TOKEN_SERVICE}
 
+  libreoffice:
+    image: libreoffice-headless:rc-_-build
+    build: ./libreoffice
+    restart: always
+    ports: 
+      - "${PORTBASE}89:5000"
+
   webapp:
-    image: webapp:0.0.1
+    image: webapp:rc-_-build
     build: ./WarehouseManager
     ports:
       - '${PORTBASE}81:3000'
     restart: always
-  
+
+  extension-builder:
+    image: extension-builder:rc-_-build
+    build: ./extensions
+    volumes:
+      - extensions:/dist
+    depends_on:
+      - directus
+
   database:
     restart: always
     image: postgis/postgis:13-master
@@ -48,7 +63,7 @@ services:
 
   directus:
     restart: always
-    image: directus/directus:latest
+    image: directus/directus:9.26
     ports:
       - '${PORTBASE}55:8055'
     volumes:
@@ -64,6 +79,7 @@ services:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
       CORS_ENABLED: 'true'
+      LOG_LEVEL: 'debug'
 
       DB_CLIENT: 'pg'
       DB_HOST: 'database'
@@ -95,24 +111,16 @@ services:
       # Make sure to set this in production
       # (see https://docs.directus.io/reference/environment-variables/#general)
       PUBLIC_URL: 'https://${PUBLIC_URL}'
-
-  extension-builder:
-    image: extension-builder:rc-_-build
-    build: ./extensions
-    volumes:
-      - extensions:/dist
-    depends_on:
-      - directus
   
-  backup:
-    restart: always
-    image: backup
-    build: ./backup
-    volumes:
-      - backups:/backups
+  pg_remote:
+    container_name: pg_remote
+    image: pg_remote:0.1 #! ACHTUNG: wird nicht automatisch gebuildet
     networks:
       - directus
+    ports:
+      - '${PORTBASE}32:3000'
     environment:
+      KEY: '${KEY}'
       DB_HOST: 'database'
       DB_PORT: '5432'
       DB_DATABASE: 'directus'

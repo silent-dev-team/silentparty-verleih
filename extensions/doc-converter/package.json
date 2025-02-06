@@ -1,5 +1,5 @@
 {
-	"name": "directus-extension-templater",
+	"name": "directus-extension-doc-converter",
 	"description": "Please enter a description for your extension",
 	"icon": "extension",
 	"version": "1.0.0",
@@ -8,17 +8,18 @@
 		"directus-extension",
 		"directus-custom-operation"
 	],
+	"type": "module",
 	"directus:extension": {
 		"type": "operation",
 		"path": {
-			"app": "../dist/operations/templater/app.js",
-			"api": "../dist/operations/templater/api.cjs"
+			"app": "../dist/operations/doc-converter/app.js",
+			"api": "../dist/operations/doc-converter/api.cjs"
 		},
 		"source": {
 			"app": "src/app.ts",
 			"api": "src/api.ts"
 		},
-		"host": "^9.25.2"
+		"host": "^10.1.3"
 	},
 	"scripts": {
 		"build": "directus-extension build",
@@ -26,13 +27,12 @@
 		"link": "directus-extension link"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "9.25.2",
-		"@types/node": "^18.15.11",
+		"@directus/extensions-sdk": "10.1.3",
+		"@types/node": "^20.2.5",
 		"typescript": "^5.0.4",
-		"vue": "^3.2.47"
+		"vue": "^3.3.4"
 	},
 	"dependencies": {
-		"adm-zip": "^0.5.10",
-		"xmldom": "^0.6.0"
+		"node-fetch": "^3.3.1"
 	}
 }

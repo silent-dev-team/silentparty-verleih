@@ -1,16 +1,18 @@
 import * as AdmZip from "adm-zip";
 import {XMLSerializer,DOMParser } from "xmldom";
 import { TemplateData } from "./types";
+import { Readable } from 'stream'
 
 export class TemplateBuilder{
     private parser = new DOMParser();
     private serializer = new XMLSerializer();
     private zip: AdmZip;
 
-    xml: Document;
+    public xml: Document;
 
-    constructor(templateOTT: string, private data:TemplateData) {
-        this.zip = new AdmZip(templateOTT);
+    constructor(buff: Buffer, private data:TemplateData) {
+        const amdzip = AdmZip.default;
+        this.zip = new amdzip(buff);
         const xmlEntry = this.zip.getEntries().find(entry => entry.entryName === 'content.xml');
         if (!xmlEntry) {
             throw new Error('No content.xml found in template');
@@ -111,6 +113,17 @@ export class TemplateBuilder{
         }
     }
 
+    toBuffer():Buffer{
+        const modifiedXmlString = this.serializer.serializeToString(this.xml);
+        this.zip.updateFile('content.xml', Buffer.from(modifiedXmlString));
+        return this.zip.toBuffer();
+    }
+
+    toStream():Readable {
+        const modifiedXmlString = this.serializer.serializeToString(this.xml);
+        this.zip.updateFile('content.xml', Buffer.from(modifiedXmlString));
+        return Readable.from(this.zip.toBuffer());
+    }
 
     save(filename: string ) {
         const modifiedXmlString = this.serializer.serializeToString(this.xml);
