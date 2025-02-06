@@ -21,13 +21,6 @@ services:
       - TG_GROUP=${TG_GROUP}
       - TOKEN_SERVICE=${TOKEN_SERVICE}
 
-  libreoffice:
-    image: libreoffice-headless:rc-06.12.22.07-build
-    build: ./libreoffice
-    restart: always
-    ports: 
-      - "${PORTBASE}89:5000"
-
   webapp:
     image: webapp:rc-06.12.22.07-build
     build: ./WarehouseManager
@@ -43,55 +36,26 @@ services:
     depends_on:
       - directus
 
-  database:
-    restart: always
-    image: postgis/postgis:13-master
-    volumes:
-      - db:/var/lib/postgresql/data
-    networks:
-      - directus
-    environment:
-      POSTGRES_USER: 'directus'
-      POSTGRES_PASSWORD: '${DB_PASSWORD}'
-      POSTGRES_DB: 'directus'
-
-  cache:
-    restart: always
-    image: redis:6
-    networks:
-      - directus
-
   directus:
     restart: always
     image: directus/directus:11.3.5
     ports:
       - '${PORTBASE}55:8055'
     volumes:
+      - db:/directus/database
       - uploads:/directus/uploads
       - ${EXTENSION_VOLUME}:/directus/extensions
       - ./templates/email:/directus/extensions/templates
     networks:
       - directus
-    depends_on:
-      - cache
-      - database
     environment:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
       CORS_ENABLED: 'true'
       LOG_LEVEL: 'debug'
 
-      DB_CLIENT: 'pg'
-      DB_HOST: 'database'
-      DB_PORT: '5432'
-      DB_DATABASE: 'directus'
-      DB_USER: 'directus'
-      DB_PASSWORD: '${DB_PASSWORD}'
-
-      CACHE_ENABLED: 'false'
-      CACHE_STORE: 'redis'
-      CACHE_REDIS: 'redis://cache:6379'
-      CACHE_AUTO_PURGE: 'true'
+      DB_CLIENT: "sqlite3"
+      DB_FILENAME: "/directus/database/data.db"
 
       ADMIN_EMAIL: '${ADMIN_EMAIL}'
       ADMIN_PASSWORD: '${ADMIN_PASSWORD}'
@@ -111,21 +75,6 @@ services:
       # Make sure to set this in production
       # (see https://docs.directus.io/reference/environment-variables/#general)
       PUBLIC_URL: 'https://${PUBLIC_URL}'
-  
-  backup:
-    restart: always
-    image: backup:rc-06.12.22.07-build
-    build: ./backup
-    volumes:
-      - backups:/backups
-    networks:
-      - directus
-    environment:
-      DB_HOST: 'database'
-      DB_PORT: '5432'
-      DB_DATABASE: 'directus'
-      DB_USER: 'directus'
-      DB_PASSWORD: '${DB_PASSWORD}'
 
 networks:
   directus:
