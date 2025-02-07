@@ -27,7 +27,7 @@ export const useFormStore = defineStore('formStore', ()=>{
 
     function storeRequest(){
         sendet.value = true;
-        fetch("http://localhost:8055/items/Anfragen",{
+        fetch("https://cms.silentparty-hannover.de/items/Anfragen",{
             method:"post",
             headers:{
                 "content-type": "application/json"

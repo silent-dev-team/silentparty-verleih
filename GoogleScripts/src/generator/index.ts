@@ -41,6 +41,7 @@ export default {
 			deadline.setDate(deadline.getDate()+10);
 			let data = 
 			  {
+				"anfrage_id":id,
 				"document_name":operation+ "_" +new Date().toLocaleString("de-DE"),
 				"felder": {
 				  "headline": "",

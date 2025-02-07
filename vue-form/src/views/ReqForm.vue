@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted,  computed } from 'vue';
 import TextInput from '../components/TextInput.vue';
 import SelectInput from '../components/SelectInput.vue';
 import { useFormStore } from '../store/formStore';
@@ -8,7 +8,6 @@ import { storeToRefs } from 'pinia';
 
 
 const formStore = useFormStore();
-const tage = ref(1);
 const inThreeDays = new Date();
 const in8Months = new Date();
 
