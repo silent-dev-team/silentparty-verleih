@@ -1,0 +1,41 @@
+{
+	"name": "GoogleScripts",
+	"description": "Please enter a description for your extension",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-bundle"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "bundle",
+		"path": {
+			"app": "../simpleDirectus/extensions/GoogleScripts/app.js",
+			"api": "../simpleDirectus/extensions/GoogleScripts/api.js"
+		},
+		"entries": [
+			{
+				"type": "endpoint",
+				"name": "generator",
+				"source": "src/generator/index.ts"
+			}
+		],
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"add": "directus-extension add"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "13.0.1",
+		"@types/node": "^22.13.1",
+		"typescript": "^5.7.3"
+	}
+}
